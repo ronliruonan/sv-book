@@ -1,4 +1,4 @@
-## Git
+## Git 常用笔记
 ### git 合并分支
 ```
 $ git checkout master
