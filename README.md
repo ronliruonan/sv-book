@@ -1,8 +1,8 @@
 # sv-book
 
 #### 常用命令行
-1. [cmd: git](https://github.com/ronliruonan/sv-book/blob/master/git.md)
-2. [cmd: centos6.8](https://github.com/ronliruonan/sv-book/blob/master/centos6.8.md)
+1. [git](https://github.com/ronliruonan/sv-book/blob/master/git.md)
+2. [centos6.8](https://github.com/ronliruonan/sv-book/blob/master/centos6.8.md)
 
 https://rxjs.dev/guide/observable   rxjs
 
