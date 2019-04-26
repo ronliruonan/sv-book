@@ -9,6 +9,16 @@
 5. 生态系统文件：好东西？
 6. 官方中文手册:  https://pm2.io/doc/zh/runtime/overview/
 
+### ::
+1. ```pm2 list <app 可选>/<pid 可选>``` 查看进程列表，默认为all
+2. ```pm2 monit <app 可选>/<pid 可选>``` 查看监控，默认为all
+3. ```pm2 reload <app 可选>/<pid 可选>``` 重新加载（不发生宕机）
+4. ```pm2 restart <app>/<pid>``` 重启（短暂宕机）pm2 
+5. ```pm2 start npm --name <name>(自定义应用名称) -i <0 - max>(开启群集) -- run start(执行脚本)```，
+6. 基于第5步骤后，执行```pm2 save``` 可以将上面的自定义执行命令保存下来，以后可以使用name进行操作
+7. ```pm2 delete <app>/<pid>``` 终止应用，并删除第6步骤的save信息
+8. ```pm2 flush``` 清空所有应用日志
+
 ### 生态系统文件
 ```
 module.exports = {
