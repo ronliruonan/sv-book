@@ -10,6 +10,23 @@
 6. 官方中文手册:  https://pm2.io/doc/zh/runtime/overview/
 
 ### 生态系统文件
+```
+module.exports = {
+  apps : [{
+    name: "app",
+    script: "./app.js",
+    env: {
+      NODE_ENV: "development",
+    },
+    env_production: {
+      NODE_ENV: "production",
+    }
+  }]
+}
+```
+使用pm2 start app --env production在运行模式下启动您的应用。
+
+
 条目名称|描述|类型|默认
 ---|---|---|---
 script|要启动的脚本路径，必填字段|string|
