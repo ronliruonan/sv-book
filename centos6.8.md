@@ -1,3 +1,4 @@
+# Centos6.8 命令ing
 1. alias
 ```
 $ cd 
