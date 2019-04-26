@@ -34,7 +34,8 @@ module.exports = {
   }]
 }
 ```
-使用pm2 start app --env production在运行模式下启动您的应用。
+
+使用```pm2 start app --env production``在运行模式下启动您的应用。
 
 
 条目名称|描述|类型|默认
