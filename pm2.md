@@ -1,6 +1,12 @@
 # PM2 Runtime 命名ing
 暂时仅用于Node项目部署
 
+直接启动一个js文件
+------------------
+```
+$ pm2 start main.js --name crawler
+```
+
 ### 优点
 1. 持久化：pm2 对于在崩溃和机器重启时自启动
 2. 软负载：pm2 通过创建多个共享相同服务器端口的子进程来扩展应用，可以在停机时间为0的情况下重启应用
@@ -19,7 +25,8 @@
 7. ```pm2 delete <app>/<pid>``` 终止应用，并删除第6步骤的save信息
 8. ```pm2 flush``` 清空所有应用日志
 
-### 生态系统文件
+生态系统文件
+===============
 ```
 module.exports = {
   apps : [{
@@ -33,6 +40,11 @@ module.exports = {
     }
   }]
 }
+```
+使用生态文件
+---------------
+```
+ pm2 restart ecosystem.config.js --only app
 ```
 
 使用```pm2 start app --env production``在运行模式下启动您的应用。
