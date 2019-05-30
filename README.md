@@ -21,3 +21,9 @@ https://segmentfault.com/a/1190000011652907
 https://cnodejs.org/topic/58e4914e43ee7e7106c13541
 https://blog.csdn.net/vM199zkg3Y7150u5/article/details/80524051
 https://segmentfault.com/a/1190000015057278?utm_source=channel-newest
+
+
+页面热更新
+-----------
+1. gulp + browser-sync
+地址:   https://github.com/ronliruonan/sv-cases/tree/master/GestureScale
