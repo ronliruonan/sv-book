@@ -27,3 +27,7 @@ https://segmentfault.com/a/1190000015057278?utm_source=channel-newest
 -----------
 1. gulp + browser-sync
 地址:   https://github.com/ronliruonan/sv-cases/tree/master/GestureScale
+
+轻量级js全文搜索
+----------------
+[lunr.js](https://lunrjs.com/docs/index.html)
