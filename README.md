@@ -31,3 +31,7 @@ https://segmentfault.com/a/1190000015057278?utm_source=channel-newest
 轻量级js全文搜索
 ----------------
 [lunr.js](https://lunrjs.com/docs/index.html)
+
+![Vue作者图片](/resources/vue/2019-06-08_232332.jpg)
+
+![进阶之路](/resources/up/2019-06-08_233312.jpg)
