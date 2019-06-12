@@ -1,7 +1,8 @@
 # Centos
 默认是6.8版本，7.x 会额外标注
 
-1. alias 别名
+alias 别名
+----------
 
 取个别名就直接用了，就像“赵四”比“尼古拉斯赵四”拼写更容易些
 ```
@@ -11,7 +12,8 @@ $ alias pip3='/usr/local/python35/bin/pip3'
 $ :wq
 $ source .bashrc
 ```
-2. 查看系统内存、磁盘等情况
+查看系统内存、磁盘等情况
+-------------------------
 内存使用
 ```
 $ free -m
@@ -20,7 +22,8 @@ $ free -m
 ```
 df -h
 ```
-3. 开启mongodb 27017默认端口
+开启mongodb 27017默认端口
+---------------------------
 ```
 $ vi /etc/sysconfig/iptables
 $ # 添加如下
@@ -28,6 +31,23 @@ $ -A INPUT -p tcp -m state --state NEW -m tcp --dport 27017 -j ACCEPT
 $ # save & exit & restart iptables
 $ /etc/init.d/iptables restart
 
+```
+
+进程命名
+---------
+```
+$ /* 查看进程 */
+$ ps -ef | grep java | grep -v grep
+
+$ /* 杀死进程 */
+$ kill -9 kid
+```
+
+修改DNS
+---------
+```
+$ vi /etc/sysconfig/network-scripts/ifcfg-eth0
+$ service network restart
 ```
 http://192.168.1.90:27017/ 这样试一下就可以知道端口和mongodb是否好使了
 感谢 博主http://www.pianshen.com/article/648772922/
