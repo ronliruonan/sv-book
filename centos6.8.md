@@ -30,7 +30,6 @@ $ # 添加如下
 $ -A INPUT -p tcp -m state --state NEW -m tcp --dport 27017 -j ACCEPT
 $ # save & exit & restart iptables
 $ /etc/init.d/iptables restart
-
 ```
 
 进程命名
