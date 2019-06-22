@@ -1,0 +1,83 @@
+<script>
+  ; (function (global, factory) {
+    return global.FnPromise = factory.call(global);
+  })(this, function () {
+    const FnPromise = function (executor) {
+      this.status = 'pending'; // 默认状态
+      this.value = void 0;     // 默认值 undefined
+      this.keepResolveFn = []; // 成功回调队列
+      this.keepRejectFn = [];  // 失败回调队列
+
+      const resolve = (val) => {
+        this.status === 'pending' && (
+          this.status = 'fulfilled',
+          this.value = val,
+          this.keepResolveFn.forEach(fn => fn())
+        );
+      };
+      const reject = (val) => {
+        this.status === 'pending' && (
+          this.status = 'rejected',
+          this.value = val,
+          this.keepRejectFn.forEach(fn => fn())
+        );
+      };
+
+      try {
+        executor(resolve, reject); // Promise 内部立即执行executor函数
+      } catch (error) {
+        reject(error);
+      }
+    }
+
+    FnPromise.prototype.then = function (onResolve, onReject) {
+      this.status === 'fulfilled' && onResolve(this.value);
+      this.status === 'rejected' && onReject(this.value);
+
+      // 这一步pending状态的方案，真的佩服参考blog的作者，茅塞顿开
+      this.status === 'pending' && (
+        this.keepResolveFn.push(() => onResolve(this.value)),
+        this.keepRejectFn.push(() => onReject(this.value))
+      );
+
+      return this; // 自动传递了Promise的状态
+    }
+
+    return FnPromise;
+  });
+</script>
+<script>
+  ; (function (global) {
+    /* 最简单的成功回调 */
+    var p1 = new Promise(resolve => resolve(200));
+    p1
+      .then(res => console.log('p1 最简单的成功回调: ', res))
+      /* Promise.then()返回promise对象，并保留resolve状态 */
+      .then(a => console.log('p1 必须出现'), b => console.log('p1 不会出现'));
+
+
+    /* 最简单的成功回调 */
+    var fp1 = new Promise(resolve => resolve(200));
+    fp1
+      .then(res => console.log('fp1 最简单的成功回调: ', res))
+      /* Promise.then()返回promise对象，并保留resolve状态 */
+      .then(a => console.log('fp1 必须出现'), b => console.log('fp1 不会出现'));
+  })(window);
+</script>
+<script>
+  ; (function (global) {
+    /* 异步回调 */
+    var sync_p = new Promise(resolve => setTimeout(resolve, Math.random() * 4000, 304));
+    sync_p
+      .then(res => console.log('sync_p 异步回调: ', res))
+      /* 异步回调的.then() 返回同样状态的promise */
+      .then(a => console.log('sync_p 必须成功'), b => console.log('sync_p 不可能出现'));
+
+    /* 异步回调 */
+    var sync_fp = new Promise(resolve => setTimeout(resolve, Math.random() * 5000, 304));
+    sync_fp
+      .then(res => console.log('sync_fp 异步回调: ', res))
+      /* 异步回调的.then() 返回同样状态的promise */
+      .then(a => console.log('sync_fp 必须成功'), b => console.log('sync_fp 不可能出现'));
+  })(window);
+</script>
