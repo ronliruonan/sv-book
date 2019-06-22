@@ -13,13 +13,13 @@ var executor = function(resolve, reject){...}
 
 new Promise(executor);
 ```
-1. Promise构造函数 接收的一个executor函数
-2. executor函数 接收两个参数(resolve, reject)：resolve 被作为成功函数来对待使用，reject 被作为失败函数来对待使用；
-   resolve 被调用时，Promise的状态改为`fulfilled`，reject被调用时，Promise状态改为`reject`
-3. Promise 在接收到executor函数时，将会 ```立即执行```executor函数，并且发生在Promise返回promise实例之前被调用
-4. executor执行过程中，成功逻辑 调用resoleve函数；失败逻辑 调用reject函数；
-   如果 执行过程中发生异常，那么Promise的状态将是`reject`
-5. executor函数的返回值将被忽略。
+-  Promise构造函数 接收的一个executor函数
+-  executor函数 接收两个参数(resolve, reject)：resolve 被作为成功函数来对待使用，reject 被作为失败函数来对待使用；
+-  resolve函数 被调用时，Promise的状态改为`fulfilled`，reject函数被调用时，Promise状态改为`reject`
+
+-  Promise 在接收到executor函数时，将会 ```立即执行```executor函数，并且发生在Promise返回promise实例之前被调用
+-  executor执行过程中，成功逻辑调用resoleve函数；失败逻辑调用reject函数；如果发生异常，Promise的状态将是`reject`
+-  executor函数的返回值将被忽略。
 
 MDN描述的理解
 ---------------
