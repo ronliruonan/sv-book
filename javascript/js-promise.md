@@ -4,8 +4,7 @@ MDN Promise 参考地址：
 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise
 
 
-之前查阅了几篇blog作为参考，最终参考了这篇blog：https://www.cnblogs.com/hjj2ldq/p/9489598.html    
-感谢原文作者！！
+之前查阅了几篇blog作为参考，最终参考了这篇blog：https://www.cnblogs.com/hjj2ldq/p/9489598.html   感谢原文作者！！
 
 MDN语法的理解
 --------------------
