@@ -133,7 +133,7 @@ FnPromise.prototype.then = function (onResolve, onReject) {
       .then(a => console.log('sync_fp 必须成功'), b => console.log('sync_fp 不可能出现'));
 ```
 
-进化版本疑问
+升级版本疑问
 -----------------
 简版Promise 无法实现一下原生效果。
 
@@ -182,9 +182,9 @@ FnPromise.prototype.then = function (onResolve, onReject) {
       );
 ```
 
-进化版思维
+升级版思维
 -------------
 沿用简版的队列、闭包思维，增加了递归（用来修订队列中的FnPromise的执行关系）
 代码实现在 [js-promise-plug.html](js-promise-plus.html)
 
-已经亲自验证了 进化版的疑问效果。
+已经亲自验证了 升级版的疑问效果。
