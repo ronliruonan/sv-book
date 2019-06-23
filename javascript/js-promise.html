@@ -43,6 +43,15 @@
       return this; // 自动传递了Promise的状态
     }
 
+    FnPromise.resolve = function (val) {
+      if (val instanceof FnPromise) return val;
+      // if('then' in val && typeof val.then === 'function') // 不知如何处理
+      return new FnPromise(resolve => resolve(val));
+    }
+    FnPromise.reject = function (val) {
+      return new FnPromise((res, reject) => reject(val));
+    }
+
     return FnPromise;
   });
 </script>

@@ -50,8 +50,10 @@ MDN的原型 - 方法
 -  Promise.reject(onReject)
 -  Promsie.resolve(value) 未实现value包含`then:function`的特性 
 
-简版实现思路
+简版实现思维
 ---------
+用到了队列 和 闭包。 代码实现在 [js-promise.html](js-promise.html)
+这个思路受到blog的启发，基于blog的思路，实现了更为贴切原生Promise的功能
 ```
 function (executor) {
     this.status = 'pending'; // 默认状态
@@ -95,7 +97,7 @@ FnPromise.prototype.then = function (onResolve, onReject) {
 }
 ```
 
-验证 精简版
+验证 简版
 -------------
 通过与原生Promise的使用对比，直接resolve
 ```
@@ -130,3 +132,59 @@ FnPromise.prototype.then = function (onResolve, onReject) {
       /* 异步回调的.then() 返回同样状态的promise */
       .then(a => console.log('sync_fp 必须成功'), b => console.log('sync_fp 不可能出现'));
 ```
+
+进化版本疑问
+-----------------
+简版Promise 无法实现一下原生效果。
+
+`一大难点：异步Promise后.then()中直接return 新的异步Promise后，下一次.then()的所属为上一步的新异步Promise`
+```
+ var b = 10;
+    var p1 = new Promise(resolve => {
+      setTimeout(() => {
+        console.log('  b += 10');
+        b += 10;
+        resolve();
+      }, 1000 * 10);
+    });
+
+    p1
+      .then(() => {
+        console.log('  第一次输出应该是20: ', b);
+
+        return 2;
+      })
+      .then((res) => {
+        console.log('  第二次输出应该是20: ', b);
+        console.log('res is 2: ', res);
+
+        return new Promise(resolve => {
+          setTimeout(() => {
+            console.log(' b *= b')
+            b *= b;
+            resolve();
+          }, 1000 * 2);
+        });
+      })
+      .then(() => {
+        console.log('  第3次输出应该是20*20: ', b);
+        return new Promise(resolve => {
+          setTimeout(() => {
+            console.log(' b = 0')
+            b = 0;
+            resolve();
+          }, 1000 * 2);
+        });
+      })
+      .then(
+        () => console.log('  应该是最后一次输出0: ', b),
+        () => console.log('  不应该出现异常')
+      );
+```
+
+进化版思维
+-------------
+沿用简版的队列、闭包思维，增加了递归（用来修订队列中的FnPromise的执行关系）
+代码实现在 [js-promise-plug.html](js-promise-plus.html)
+
+已经亲自验证了 进化版的疑问效果。

@@ -1,0 +1,261 @@
+<script>
+  ; (function (global, factory) {
+    return global.FnPromise = factory.call(global);
+  })(this, function () {
+    const FnPromise = function (executor) {
+      this.status = 'pending'; // 默认状态
+      this.value = void 0;     // 默认值 undefined
+      this.keepResolveFn = []; // 成功回调队列
+      this.keepRejectFn = [];  // 失败回调队列
+
+      /* 解决难点的关键点 */
+      function recursive(array, index, length, instance) {
+        if (length === 0 || index + 1 > length) return;
+        if (instance instanceof FnPromise) {
+          instance.then(
+            res => {
+              let result = array[index](res);
+              recursive(array, 1 + index, length, result)
+            },
+            rej => {
+              let result = array[index](rej);
+              recursive(array, 1 + index, length, result)
+            }
+          );
+        } else {
+          let result = array[index]();
+          recursive(array, 1 + index, length, result);
+        }
+      }
+
+      const resolve = (val) => {
+        if (this.status !== 'pending') return;
+        this.status = 'fulfilled';
+        this.value = val;
+
+        recursive(this.keepResolveFn, 0, this.keepResolveFn.length, null);
+      };
+      const reject = (val) => {
+        if (this.status !== 'pending') return;
+        this.status = 'rejected';
+        this.value = val;
+
+        recursive(this.keepRejectFn, 0, this.keepRejectFn.length);
+      };
+
+      try {
+        executor(resolve, reject); // Promise 内部立即执行executor函数
+      } catch (error) {
+        reject(error);
+      }
+    }
+
+    FnPromise.prototype.then = function (onResolve, onReject) {
+      if (this.status === 'fulfilled') {
+        let result = onResolve(this.value);
+        return result instanceof FnPromise ? result : this;
+      }
+
+      if (this.status === 'rejected') {
+        let result = onReject(this.value);
+        return result instanceof FnPromise ? result : this;
+      }
+
+      // 自动剩余 pending 状态
+      // this.status === 'pending' && (
+      this.keepResolveFn.push(() => {
+        let result = onResolve(this.value);
+        this.value = result;
+        return result;
+      });
+      this.keepRejectFn.push(() => {
+        let result = onReject(this.value);
+        this.value = result;
+        return result;
+      });
+      return this;
+    }
+
+    // 添加 resolve() 和 reject() 方法
+    FnPromise.resolve = function (val) {
+      if (val instanceof FnPromise) return val;
+      // if('then' in val && typeof val.then === 'function') // 不知如何处理
+      return new FnPromise(resolve => resolve(val));
+    }
+    FnPromise.reject = function (val) {
+      return new FnPromise((res, reject) => reject(val));
+    }
+
+    return FnPromise;
+  });
+</script>
+
+<script>
+  // ; (function (global) {
+  //   var b = 10;
+  //   var p1 = new Promise(resolve => {
+  //     setTimeout(() => {
+  //       console.log(' b += 10');
+  //       b += 10;
+  //       resolve();
+  //     }, 2000);
+  //   });
+
+  //   p1
+  //     .then(() => {
+  //       console.log('第一次输出应该是20: ', b);
+
+  //       return new Promise(resolve => {
+  //         setTimeout(() => {
+  //           console.log('b *= 2');
+  //           b *= 2;
+  //           resolve();
+  //         }, 2000);
+  //       });
+  //     })
+  //     .then(() => {
+  //       console.log('第二次输出应该是40: ', b);
+
+  //       return new Promise(resolve => {
+  //         setTimeout(() => {
+  //           console.log('b *= b')
+  //           b *= b;
+  //           resolve();
+  //         }, 2000);
+  //       });
+  //     })
+  //     .then(() => console.log('应该是最后一次输出1600: ', b))
+  //     .catch(() => console.log('不应该出现异常'));
+  // })(window);
+</script>
+<script>
+  // ; (function (global) {
+  //   var b = 10;
+  //   var p1 = new FnPromise(resolve => {
+  //     setTimeout(() => {
+  //       console.log('FnPromise b += 10');
+  //       b += 10;
+  //       resolve();
+  //     }, 1000 * 10);
+  //   });
+
+  //   p1
+  //     .then(() => {
+  //       console.log('FnPromise 第一次输出应该是20: ', b);
+
+  //       return new FnPromise(resolve => {
+  //         setTimeout(() => {
+  //           console.log('FnPromise b *= 2');
+  //           b *= 2;
+  //           resolve();
+  //         }, 1000 * 2);
+  //       });
+  //     })
+  //     .then(() => {
+  //       console.log('FnPromise 第二次输出应该是40: ', b);
+
+  //       return new FnPromise(resolve => {
+  //         setTimeout(() => {
+  //           console.log('FnPromise b *= b')
+  //           b *= b;
+  //           resolve();
+  //         }, 1000 * 2);
+  //       });
+  //     })
+  //     .then(
+  //       () => console.log('FnPromise 应该是最后一次输出1600: ', b),
+  //       () => console.log('FnPromise 不应该出现异常')
+  //     );
+  // })(window);
+</script>
+
+<script>
+  ; (function (global) {
+    var b = 10;
+    var p1 = new Promise(resolve => {
+      setTimeout(() => {
+        console.log('  b += 10');
+        b += 10;
+        resolve();
+      }, 1000 * 10);
+    });
+
+    p1
+      .then(() => {
+        console.log('  第一次输出应该是20: ', b);
+
+        return 2;
+      })
+      .then((res) => {
+        console.log('  第二次输出应该是20: ', b);
+        console.log('res is 2: ', res);
+
+        return new Promise(resolve => {
+          setTimeout(() => {
+            console.log(' b *= b')
+            b *= b;
+            resolve();
+          }, 1000 * 2);
+        });
+      })
+      .then(() => {
+        console.log('  第3次输出应该是20*20: ', b);
+        return new Promise(resolve => {
+          setTimeout(() => {
+            console.log(' b = 0')
+            b = 0;
+            resolve();
+          }, 1000 * 2);
+        });
+      })
+      .then(
+        () => console.log('  应该是最后一次输出0: ', b),
+        () => console.log('  不应该出现异常')
+      );
+  })(window);
+</script>
+<script>
+  ; (function (global) {
+    var b = 10;
+    var p1 = new FnPromise(resolve => {
+      setTimeout(() => {
+        console.log('FnPromise  b += 10');
+        b += 10;
+        resolve();
+      }, 1000 * 10);
+    });
+
+    p1
+      .then(() => {
+        console.log('FnPromise  第一次输出应该是20: ', b);
+
+        return 2;
+      })
+      .then((res) => {
+        console.log('FnPromise  第二次输出应该是20: ', b);
+        console.log('FnPromise res is 2: ', res);
+
+        return new FnPromise(resolve => {
+          setTimeout(() => {
+            console.log('FnPromise b *= b')
+            b *= b;
+            resolve();
+          }, 1000 * 2);
+        });
+      })
+      .then(() => {
+        console.log('FnPromise  第3次输出应该是20*20: ', b);
+        return new FnPromise(resolve => {
+          setTimeout(() => {
+            console.log(' b = 0')
+            b = 0;
+            resolve();
+          }, 1000 * 2);
+        });
+      })
+      .then(
+        () => console.log('FnPromise  应该是最后一次输出0: ', b),
+        () => console.log('FnPromise  不应该出现异常')
+      );
+  })(window);
+</script>
