@@ -185,6 +185,7 @@ FnPromise.prototype.then = function (onResolve, onReject) {
 升级版思维
 -------------
 沿用简版的队列、闭包思维，增加了递归（用来修订队列中的FnPromise的执行关系）
+
 代码实现在 [js-promise-plug.html](js-promise-plus.html)
 
 已经亲自验证了 升级版的疑问效果。
