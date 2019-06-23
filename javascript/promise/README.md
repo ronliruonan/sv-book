@@ -188,6 +188,7 @@ FnPromise.prototype.then = function (onResolve, onReject) {
 
 代码实现在 [js-promise-plug.html](js-promise-plus.html)
 
-已经亲自验证了 升级版的疑问效果。
-ps: 
+已经亲自验证了 升级版的疑问效果。    
+
+ps:     
 思考方案 -> blog论证 -> 简版(coding、代码验证、逻辑推敲、代码验证、逻辑推敲) -> 升级版(coding、代码验证、逻辑推敲、代码验证、逻辑推敲...) -> 脑仁疼了2、3天
