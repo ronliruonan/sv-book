@@ -17,9 +17,16 @@
             return res ? res : o;
         }
 
+        var FnNew_2 = function (classname, args) {
+            var o = Object.create(classname.prototype);
+            var res = classname.call(o, ...args);
+            return res ? res : o;
+        }
+
         function Person(name, age) {
             this.name = name, this.age = age;
         }
-        console.log(FnNew(Person, ['java', 20]))
+        console.log(FnNew(Person, ['java', 20]));
+        console.log(FnNew_2(Person, ['a', 23]))
     })(window);
 </script>

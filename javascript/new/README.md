@@ -96,3 +96,15 @@ new Date().getTime();//===((new Date()).getTime)()
 new Date.getTime();//Uncaught TypeError: Date(...).getTime is not a function；===new (Date.getTime)()
 ```
 感谢作者：https://www.cnblogs.com/goloving/p/9297019.html
+
+
+es6 的实现
+-------------
+参考点：[Object.create()](../object/Object.create.md)
+```
+var fnNew = function(classname, args){
+    var o = Object.create(classname.prototype);
+    var res = classname.call(o, ...args);
+    return res?res:o;
+}
+```

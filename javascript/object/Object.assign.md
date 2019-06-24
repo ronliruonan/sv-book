@@ -57,10 +57,14 @@ console.log(target.foo3); // undefined，异常之后 assign 方法就退出了�
 console.log(target.baz);  // undefined，第三个源对象更是不会被拷贝到的。
 ```
 
-拷贝访问器
+拷贝访问器，牛掰
 -----------
 可以理解为Object.assign()的js高级实现
 
 代码Object.assign.html中
 
 阅读需要准备 Object.keys() Array.prototype.reduce() Object.getOwnpropertyDescriptor() Object.getOwnPropertySumbols() Object.definedProperyies()
+
+
+牛掰的Polyfill
+------------------

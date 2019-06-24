@@ -1,0 +1,59 @@
+<script>
+    const person = {
+        isHuman: false,
+        prinIntroduction: function () {
+            console.log(this.name, this.isHuman);
+        }
+    }
+
+    const me = Object.create(person);
+
+    me.name = 'math';
+    me.isHuman = true;
+
+    me.prinIntroduction();
+</script>
+<script>
+    /*单继承*/
+    ; ((global) => {
+
+        function Shape() {
+            this.x = 0;
+            this.y = 0;
+        }
+        Shape.prototype.move = function (x, y) {
+            console.log('move')
+        }
+
+        function Rectangle() {
+            Shape.call(this);
+        }
+        // Object.create(proto, propertiesObject) 
+        // 返回一个新对象，带着指定的原型对象和属性
+        Rectangle.prototype = Object.create(Shape.prototype);
+        Rectangle.prototype.constructor = Rectangle;
+    })(window);
+</script>
+
+<script>
+    /* extended 到多个对象 */
+    ; (global => {
+        function SuperClass() {
+            this.first = '1';
+        }
+        function OtherSuperClass() {
+            this.seconde = '2';
+        }
+        function MyClass() {
+            SuperClass.call(this);
+            OtherSuperClass.call(this);
+        }
+        // 继承一个类
+        MyClass.prototype = Object.create(SuperClass.prototype);
+        // 混合其它的
+        Object.assign(MyClass.prototype, OtherSuperClass.prototype);
+        // 重新制定constructor
+        MyClass.prototype.constructor = MyClass;
+        MyClass.prototype.vv = function () { console.log('vv') }
+    })(window);
+</script>
