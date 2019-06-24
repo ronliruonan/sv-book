@@ -1,0 +1,42 @@
+<script>
+    ; (function (global) {
+
+        /* 禁止使用循环方式，填充数组 */
+        // let i = 0,
+        //     array1 = [],
+        //     interval = setInterval(() => {
+        //         // if (i === 50 ) { return clearInterval(interval) }
+        //         // array1.push(i++);
+        //         i === 50 ? clearInterval(interval) : array1.push(i++);
+        //     }, 0);;
+
+
+        // setTimeout(() => {
+        //     console.log(array1);
+        // }, 1000 * 1)
+
+        // 递归: 函数里面调用函数本身，优势性能比较好,劣势 消耗内存空间
+        // function recursive(array, index, length) {
+        //     if (index === length) return;
+        //     array.push(index);
+        //     recursive(array, 1 + index, length);
+        // }
+
+        // var array = [];
+        // recursive(array, 0, 50);
+        // console.log(array);
+
+        // 熟练运用数组API
+        // var array = new Array(50).join(',').split(',').map((v,i)=>v = i);
+        // console.log(array);
+
+        var array = new Array(50).fill(null).map((v, i) => v = i);
+        console.log(array);
+
+        // 过滤 7的倍数 和 各位含有7的
+        var sb = array.filter(v => v % 7 !== 0 && v % 10 !== 7);
+        console.log(sb);
+
+
+    })(window);
+</script>

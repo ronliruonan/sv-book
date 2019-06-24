@@ -1,0 +1,69 @@
+<h1>js 继承</h1>
+<script>
+    /* 优雅的继承 */
+    function Parent(age) {
+        this.age = age;
+    }
+    Parent.prototype = {
+        speak: function () {
+            console.log(this.age, '这么大了')
+        }
+    }
+    function Dog() {
+        this.name = '小汪'
+    }
+    Dog.prototype.wong = function () { console.log('wong', this.name) }
+
+    function Child(age, nick) {
+        Parent.call(this, age);
+        Dog.call(this);
+        this.nick = nick;
+    }
+    // // 继承原型链，并增加特有原型方法
+    // Child.prototype = Object.create(Parent.prototype, {
+    //     play: {
+    //         // writable: true, // 是否可以使用赋值运算操作
+    //         // enumerable: true, // 枚举时，是否显示该属性
+    //         // configurable: true, // 是否可以在对象中删除
+    //         value: function () { }
+    //     }
+    // });
+    Child.prototype = Object.create(Parent.prototype);
+    Child.prototype.play = function () { }
+    Object.assign(Child.prototype, Dog.prototype);
+
+    // 纠正构造函数
+    Child.prototype.constructor = Child;
+
+    var parent = new Parent(30);
+    var child = new Child(6, 'nini');
+    console.log('parent: ', parent);
+    console.log('child: ', child);
+
+    console.log('Child instanceof Child: ', new Child instanceof Child);
+    console.log('Child instanceof Parent: ', new Child instanceof Parent);
+</script>
+<script>
+    class P1 {
+        constructor(age) {
+            this.age = age;
+        }
+        speak() {
+            console.log('我多大了：', this.age);
+        }
+    }
+    class C1 extends P1 {
+        constructor(age, nick) {
+            super(age);
+            this.nick = nick;
+        }
+        play() { }
+    }
+    var p1 = new P1(20);
+    var c1 = new C1(2, 'nini');
+    console.log('p1: ', p1);
+    console.log('c1: ', c1);
+
+    console.log('c1 instanceof c1: ', new C1 instanceof C1);
+    console.log('c1 instanceof p1: ', new C1 instanceof P1);
+</script>

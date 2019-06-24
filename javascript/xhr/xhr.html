@@ -1,0 +1,51 @@
+<script>
+    ; (function (global) {
+        /* XMLHttpRequest.onreadystatechange */
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https:/...', true); // true 代表是否异步执行
+        xhr.timeout = 2000; // 超时2000ms
+        // xhr.onreadystatechange = () => {
+        //     // XMLHttpRequest.readyState [UNSET, OPENED, HEADERS_RECEIVED, LOADING, DONE]
+        //     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        //         console.log(xhr.response);
+        //     }
+        // };
+        xhr.onload = function () { }
+        xhr.ontimeout = function () { }
+        // xhr.send();
+    })(window);
+</script>
+
+<script>
+    ; (function (global) {
+        /* XMLHttpRequest.onreadystatechange */
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https:/...', true); // true 代表是否异步执行
+        // xhr.onreadystatechange = () => {
+        //     // XMLHttpRequest.readyState [UNSET, OPENED, HEADERS_RECEIVED, LOADING, DONE]
+        //     if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        //         console.log(xhr.response);
+        //     }
+        // };
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencode');
+        xhr.onload = function () { }
+        // xhr.send('foo=bar&lore=insum');
+    })(window);
+</script>
+
+<script>
+    ; (function (global) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://www.baidu.com', true);
+        // xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencode');
+        xhr.onerror = () => { };
+        xhr.onloadstart = () => { }; // Http 请求开始加载数据时，调用
+        xhr.onloadend = () => { }; // Http 内容加载完成后，调用
+        xhr.onload = () => { };
+        xhr.onprogress = (event) => {
+            console.log('event.loaded', event.loaded);
+            console.log('event.total', event.total);
+        };
+        xhr.send();
+    })(window);
+</script>
