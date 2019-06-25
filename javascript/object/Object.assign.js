@@ -1,4 +1,5 @@
-<script>
+; (_ => {
+
     const obj = {
         foo: 1,
         get bar() {
@@ -33,4 +34,5 @@
     copy = completeAssign({}, obj);
     console.log(copy);
     // expected output: {foooo:1, get bar(){return 2}}
-</script>
+
+})();
