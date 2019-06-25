@@ -74,3 +74,14 @@
         return Object.freeze(obj);
     }
 })();
+
+; (_ => {
+    // 一个对象默认是可扩展的，所以他也是非冻结的
+    console.log(Object.isFrozen({}));
+
+    // 一个不可扩展的空对象 同事也是一个冻结对象
+    var fr = Object.preventExtensions({});
+    console.log(Object.isFrozen(fr))
+
+    
+})();
