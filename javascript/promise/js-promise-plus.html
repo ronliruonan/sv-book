@@ -67,12 +67,12 @@
       this.keepResolveFn.push(() => {
         let result = onResolve(this.value);
         this.value = result;
-        return result;
+        return result; // realy needed
       });
       this.keepRejectFn.push(() => {
         let result = onReject(this.value);
         this.value = result;
-        return result;
+        return result; // realy needed
       });
       return this;
     }
