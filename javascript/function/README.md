@@ -1,0 +1,1 @@
+apply  call bind 实现
