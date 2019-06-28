@@ -54,6 +54,7 @@ n.constructor === Number; // true
 
 isPrototypeOf() 与 instancof 运算不同；在`object instanceof AFunction`中，object的原型链是针对AFunction.prototype 进行检查的，而不是针对AFunction本身。
 *土话： instanceof 判断是 原型链 和 原型上的事儿；isPrototypeOf() 是对象本身的事儿*
+** instanceof 有自己的作用域，拿iframe举例子，winow.frames[0]  和 window.frames[1] 的都不是一会儿事儿
 
 ```
 prototypeObj.isPrototypeOf(object)
