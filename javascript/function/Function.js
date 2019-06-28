@@ -232,3 +232,15 @@
     console.log('bb', bb);
     console.log('obj', obj)
 })(window);
+
+
+; (global => {
+   
+    function fn() {
+        this.Symbol('log') = 100;
+
+        console.log(this.Symbol('log'))
+    }
+
+    fn();
+})(window);

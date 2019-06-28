@@ -19,7 +19,7 @@ IIFE(Immediately Invokable Function Exproseeions)
 `function*` 定义生成器函数
 ================
 
-``
+```
 function* generator(i){
     yield i;
     yield i + 10;
@@ -30,3 +30,19 @@ conso.log(gen.next().value);
 
 console.log(gen.next().value);
 ```
+
+
+
+牛逼的箭头函数
+================
+
+通过call 或者 apply 调用，不绑定this，第一个参数会被忽略
+----------------
+
+不绑定arguments
+---------------
+你在实现new的解析过程中有发现的，现在在mdn得到了证实
+
+箭头函数没有prototype属性
+---------------
+
