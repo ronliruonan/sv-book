@@ -2,31 +2,54 @@
     ; (function (global) {
 
         function FnNew(classname, args) {
+            console.group('fn new')
             // 1. 创建一个空的简单对象{}
             var obj = {};
             // 2. 将obj的构造函数链接到classname对象
             obj.__proto__ = classname.prototype;
             // 3. 将obj作为this上下文
             var res = classname.call(obj, ...args);
+
+            console.log(obj);
+            console.log('res', res);
+            console.groupEnd();
             // 4. 如果res为对象那么返回，如果不是，就返回obj
-            return res ? res : obj;
+            return res !== null && typeof res === 'object' ? res : obj;
         }
         function FnNew_1(classname, args) {
+            console.group('fn new 1')
             var o = { '__proto__': classname.prototype };
             var res = classname.call(o, ...args);
-            return res ? res : o;
+            console.log(o);
+
+            console.log('res', res);
+
+            console.groupEnd();
+            return res !== null && typeof res === 'object' ? res : o;
+
         }
 
         var FnNew_2 = function (classname, args) {
+            console.group('fn new 2')
             var o = Object.create(classname.prototype);
             var res = classname.call(o, ...args);
-            return res ? res : o;
+            console.log(o);
+
+            console.log('res', res);
+
+            console.groupEnd();
+
+            return res !== null && typeof res === 'object' ? res : o;
         }
 
         function Person(name, age) {
             this.name = name, this.age = age;
+            return {};
         }
-        console.log(FnNew(Person, ['java', 20]));
-        console.log(FnNew_2(Person, ['a', 23]))
+        console.log('new return:', FnNew(Person, ['java', 20]));
+        console.log('new 2 return:', FnNew_2(Person, ['a', 23]))
     })(window);
+
+    // 这里可以参考Function.md、Function.js
+    // return 只有return 是一个function 或者 object 才会被真正的返回
 </script>
