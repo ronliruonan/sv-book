@@ -52,4 +52,27 @@
 
     // 这里可以参考Function.md、Function.js
     // return 只有return 是一个function 或者 object 才会被真正的返回
+
+</script>
+<script>
+    ; (global => {
+        function newSetPrototyOf(fn, ...args) {
+            var o = Object.setPrototypeOf({}, fn.prototype);
+            var res = fn.call(o, ...args);
+            return res !== null && typeof res === 'object' ? res : o;
+        }
+        function newCreate(classname, ...args) {
+            var o = Object.create(classname.prototype);
+            var res = classname.call(o, ...args);
+
+            return res !== null && typeof res === 'object' ? res : o;
+        }
+        function Person(name, age) {
+            this.name = name, this.age = age;
+            // return {};
+        }
+        console.log('newSetPrototyOf:', newSetPrototyOf(Person, 'newSetPrototyOf', 100));
+        console.log('newCreate:', newCreate(Person, 'newCreate', 300));
+
+    })(window);
 </script>
