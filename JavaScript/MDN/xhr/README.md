@@ -20,3 +20,40 @@ XMLHttpRequest
         };
         xhr.send();
 ```
+
+
+
+CORS 跨域资源共享标准
+======================
+coross-origin sharing standard
+
+
+CORS 预检请求
+---------------------
+
+
+Http 请求首部字段
+----------------------
+
+Origin
+
+Access-Control-Reqeust-Method
+
+Access-Control-Request-Headers
+
+
+Http 响应首部字段
+---------------------
+Access-Control-Allow-Origin
+
+Access-Control-Expost-Headers
+
+Access-Control-Max-Age
+
+Access-Control-Allow-Credentials
+
+Access-Tontrol-Allow-Methods
+
+Access-Control-Allow-Headers
+
+
