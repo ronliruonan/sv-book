@@ -1,4 +1,4 @@
-`Object.is()` 判断两个值 是否是相同的值
+`Object.is(value1, value2)` 判断两个值 是否是相同的值
 =============
 
 - 两个值 都是 undefined
