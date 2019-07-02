@@ -195,6 +195,20 @@
     console.log(padZeros(6, 0, 123), 123);
     console.log(padZeros(6, 0, 1234), 1234);
     console.log(padZeros(6, 0, 12345), 12345);
+
+
+
+    ; (global => {
+
+        function padStart(str, targetLength, padString) {
+            targetLength = targetLength - str.length;
+            targetLength > padString.length && (padString += padString.repeat(targetLength / padString.length))
+
+            return padString.slice(0, targetLength) + str;// String(this);
+        }
+
+        console.log(padStart('123', 6, '0'));
+    })(window);
 })(window);
 
 ; (global => {
@@ -235,7 +249,7 @@
 
 
 ; (global => {
-   
+
     function fn() {
         this.Symbol('log') = 100;
 

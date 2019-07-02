@@ -22,21 +22,41 @@
 })(window);
 
 
-; (global => {
-    function sp(str = 'bbaddaff', sp = 'a') {
+// ; (global => {
+//     function sp(str = 'abcadeafg', sp = 'a') {
 
-        // 找到所有的索引
-        let indexs = [];
-        let indexs_last = indexs[indexs.length - 1];
+//         // 找到所有的索引
+//         let indexs = [];
+//         let indexs_last = indexs[indexs.length - 1] || 0;
 
-        do {
-            debugger;
-            indexs.push(str.indexOf(sp, indexs_last));
-            indexs_last = indexs[indexs.length - 1] + 1;
-        } while (str.indexOf(sp, indexs_last) !== -1);
+//         do {
+//             // debugger;
+//             indexs.push(str.indexOf(sp, indexs_last));
+//             indexs_last = indexs[indexs.length - 1] + 1;
+//         } while (str.indexOf(sp, indexs_last) !== -1);
 
-        return indexs;
-    }
+//         // return indexs;
 
-    console.log(sp());
-})(window);
+//         indexs.push(str.length);
+//         indexs[0] !== 0 && indexs.unshift(0);
+
+//         let result = [];
+//         indexs.forEach((v, i) => {
+//             if (i === 0) {
+//                 // result.push('');
+
+//             } else if (i === str.length) {
+//                 result.push('');
+
+//             } else {
+//                 let iiii = indexs[i - 1] === 0 ? 0 : indexs[i - 1] + 1;
+//                 result.push(str.slice(iiii, v))
+//             }
+//         })
+
+//         return result;
+//     }
+
+//     console.log(sp());
+// })(window);
+
