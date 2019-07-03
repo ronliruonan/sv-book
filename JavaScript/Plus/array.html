@@ -1,6 +1,8 @@
 <script>
     ; (function (global) {
 
+        Array.from({lenght: 5},(v,i)=>i);
+
         /* 禁止使用循环方式，填充数组 */
         // let i = 0,
         //     array1 = [],
@@ -36,6 +38,7 @@
         // 过滤 7的倍数 和 各位含有7的
         var sb = array.filter(v => v % 7 !== 0 && v % 10 !== 7);
         console.log(sb);
+
 
 
     })(window);
