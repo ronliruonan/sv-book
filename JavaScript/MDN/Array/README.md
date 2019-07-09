@@ -33,7 +33,7 @@ Array.prototype.push.call(thisArr, ...[1,2,3,3,4,5,5,5])
 
     function fn()}{return Array.from(arguments)}
 
-    // 这个牛逼了
+    // 这个牛逼了, 生成一个长度为50的数组，每项的值等于对应的索引
     Array.from({lenght: 5},(v,i)=>i);
 
     // 数组去重
@@ -186,7 +186,7 @@ join() 方法将一个数组或者类数组对象 的所有元素链接哼一个
 ## `Array.prototype.slice()`
 
 返回一个新的数组对象；该对象有begin和end（不含end）的原数组的浅拷贝。原数组不变
-
+按照索引走，默认从0开始
 
 ## `Array.prototype.indexOf()`
 
@@ -200,6 +200,14 @@ join() 方法将一个数组或者类数组对象 的所有元素链接哼一个
 
 #  迭代方法
 ##  Array.prototype.forEach()
+语法
+```
+  arr.forEach(callback[, thisArg]);
+  // callback 为数组中每个元素执行的函数，接收三个参数
+  //          1. currentValue, 2. index, 3. array
+  // thisArg, 当执行回调函数时，用作this的参考对象
+```
+
 除了抛出一个异常，否则无法终止 或者 跳出
 
 可以使用for...of 循环， every(), some(),find(),findIndex()

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <section id="se" style="background: red;height: 200px;">
+        <div id='di' style="background: yellow; height: 100px;">
+            <button type="button" id='btn'> 点我 啊 </button>
+        </div>
+    </section>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('se').addEventListener('click', function (event) {
+                console.group('se');
+                console.log('target', event.target);
+                console.log(event.currentTarget);
+                console.groupEnd();
+            }, false);
+            // document.getElementById('di').addEventListener('click', function (event) {
+            //     console.group('id');
+            //     if (event.target.id === 'btn') {
+            //         console.log('哈哈，事件委托就这么哦了')
+            //     }
+            //     console.groupEnd();
+            // }, false);
+            document.getElementById('btn').addEventListener('click', function (event) {
+                console.group('btn');
+                // console.log('target', event.target);
+                console.log('我是庄家')
+                console.log(event.currentTarget);
+                console.groupEnd();
+            }, false);
+
+            const sbb = function (e) {
+                console.log('sbb');
+                console.log(e.target)
+            }
+
+            sb('#se', '#btn', 'click', sbb);
+
+        });
+        function sb(p = '#se', c = '#btn', e_name = 'click', callback = () => { }) {
+            document.querySelector(p).addEventListener(e_name, callback, false);
+        }
+    </script>
+
+    <div style="
+      width:0; 
+     height: 0;
+      background: blue;
+       margin: 100px;
+    border-top: 20px red solid;
+    border-right: 20px #fff solid;
+    border-bottom: 20px #fff solid;
+    border-left: 20px #fff solid;
+    transform: rotate(90deg);
+    "></div>
+</body>
+
+</html>

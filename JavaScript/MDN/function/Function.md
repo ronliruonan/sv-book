@@ -36,13 +36,35 @@ console.log(gen.next().value);
 牛逼的箭头函数
 ================
 
-通过call 或者 apply 调用，不绑定this，第一个参数会被忽略
-----------------
+### 1. 通过call 或者 apply 调用，不绑定this，第一个参数会被忽略
+```
+var adder = {
+  base : 1,
+    
+  add : function(a) {
+    var f = v => v + this.base;
+    return f(a);
+  },
 
-不绑定arguments
----------------
+  addThruCall: function(a) {
+    var f = v => v + this.base;
+    var b = {
+      base : 2
+    };
+            
+    return f.call(b, a);
+  }
+};
+
+console.log(adder.add(1));         // 输出 2
+console.log(adder.addThruCall(1)); // 仍然输出 2（而不是3 ——译者注）
+```
+
+### 2. 没有自己的this，arguments， 
 你在实现new的解析过程中有发现的，现在在mdn得到了证实
 
-箭头函数没有prototype属性
----------------
+### 3. 没有prototype属性
+### 4. 不能使用new操作
+### 5. 不能在函数体中使用yield
+
 
