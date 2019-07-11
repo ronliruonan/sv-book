@@ -1,0 +1,43 @@
+<script>
+    ; ((global) => {
+        var arr = [1, 2, 12, 12, 2, 3, 3, 43, 4, 4, 4, 5, 5, 56, 6, 676, 7, 78, 7, , 89];
+        // 1. 利用reduce
+        Array.prototype.sbunique = function () {
+            return this.reduce((arr, cur) => {
+                !arr.find(v => v === cur) && arr.push(cur);
+                return arr;
+            }, []);
+        }
+
+        console.log('reduce', [].sbunique.call(arr));
+
+        // 2. 利用Set
+        Array.prototype.sbunique2 = function () {
+            return Array.from(new Set(this));
+        }
+        console.log('会把empty转换为undefinded')
+        console.log('Set', [].sbunique2.call(arr))
+
+        // 3. 利用index
+        Array.prototype.sbunique3 = function () {
+            return this.filter((v, i, arr) => arr.indexOf(v) === i)
+        }
+        console.log('indexOf', [].sbunique3.call(arr))
+
+        // 4. 利用hash值
+        Array.prototype.sbunique4 = function () {
+            const hashMap = new Map();
+            this.forEach(v => {
+                !hashMap.has(v) && hashMap.set(v, v);
+            });
+            return Array.from(hashMap.keys());
+        }
+        console.log('hash', [].sbunique4.call(arr))
+
+
+        //    // 这个牛逼了, 生成一个长度为50的数组，每项的值等于对应的索引
+        Array.from({ lenght: 5 }, (v, i) => i);
+
+        // arr.sort(()=>Math.random()>0.5?-1:1);
+    })(window);
+</script>

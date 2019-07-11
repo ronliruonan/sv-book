@@ -1,0 +1,50 @@
+<html>
+
+<body>
+
+    <div id="sb1" style="width: 200px; height:200px; background-color: #333; color: #fff;text-align: center;">
+
+    </div>
+    <script>
+        ; (global => {
+            var count = 0;
+            document.querySelector('#sb1')
+                // .addEventListener('mouseover', debounce(handler, 1000, true), false);
+                .addEventListener('mousemove', throttle(handler, 1000));
+            function handler() {
+                this.innerText = ++count;
+            }
+
+            function debounce(fn, delay, flag) {
+                var timeout;
+                return function () {
+                    clearTimeout(timeout);
+                    if (flag) {
+                        if (!timeout) {
+                            fn.apply(this);
+                        }
+                        timeout = setTimeout(() => {
+                            timeout = null;
+                        }, delay);
+                    } else {
+                        timeout = setTimeout(fn.bind(this), delay);
+                    }
+                }
+            }
+
+
+            function throttle(fn, delay) {
+                var pretime = Date.now();
+                return function () {
+                    let now = Date.now();
+                    if (now - pretime > delay) {
+                        fn.apply(this);
+                        pretime = now;
+                    }
+                }
+            }
+        })(window);
+    </script>
+</body>
+
+</html>

@@ -6,10 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .red {
+            color: red;
+        }
+
+        .blue {
+            color: blue;
+        }
+    </style>
 </head>
 
 <body>
-
+    <div class="red blue"> 这应该是蓝色</div>
+    <div class="blue red"> 这应该是红色</div>
     <section id="se" style="background: red;height: 200px;">
         <div id='di' style="background: yellow; height: 100px;">
             <button type="button" id='btn'> 点我 啊 </button>
@@ -65,3 +75,18 @@
 </body>
 
 </html>
+
+<script>
+    ; (function () {
+        var test = (function (a) {
+            this.a = a;
+            return function (b) {
+                return this.a + b;
+            }
+        }(function (a, b) {
+            return a;
+        }(1, 2)));
+
+        console.log(test(4))
+    })();
+</script>

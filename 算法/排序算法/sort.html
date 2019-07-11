@@ -1,0 +1,122 @@
+<h1>前端与排序算法</h1>
+<img src="sort.png" />
+<p>若 n 较小（如n小于50），可直接 插入排序 或者 选择排序</p>
+<p>若 初始状态有序（指正序），则直接 插入排序 或者冒泡 或者 快速排序 </p>
+<p>若 n 较大，则采用时间复杂度为O(n logn)的排序，快速排序、堆排序、归并排序</p>
+<p>若 n 较小，考虑稳定性，使用 基数排序 计数排序 或者 桶排序</p>
+<!-- https://www.cnblogs.com/roam/p/7423805.html -->
+<script>
+    ; (global => {
+        const stu_arr = [
+            { name: 'Aai', age: 30 },
+            { name: 'Bgi', age: 24 },
+            { name: 'Aci', age: 26 },
+            { name: 'Bfi', age: 61 },
+            { name: 'Hli', age: 31 },
+            { name: 'Bei', age: 37 },
+            { name: 'Adi', age: 42 },
+        ];
+        console.log('a.age > b.age ? 1 : -1',
+            stu_arr.sort((a, b) => a.age > b.age ? 1 : -1))
+    })(window);
+</script>
+<script>
+
+    // 归并排序算法
+    // 平均时间复杂度   O(n log n)
+    // 最好情况        O(n logo n)
+    // 最坏情况        O(n log n)
+    // 空间复杂度      O(n)  Out-place 稳定
+    ; (global => {
+        // 合并
+        function merge(left_arr = [], right_arr = []) {
+            const result = [];
+            while (left_arr.length > 0 && right_arr.length > 0) {
+                if (left_arr[0] < right_arr[0]) {
+                    result.push(left_arr.shift());
+                } else {
+                    result.push(right_arr.shift());
+                }
+            }
+            return result.concat(left_arr).concat(right_arr);
+        }
+
+        // 拆分
+        function mergeSort(arr = []) {
+            if (arr.length === 1) return arr;
+
+            const mid = Math.floor(arr.length / 2);
+            const left_arr = arr.slice(0, mid);
+            const right_arr = arr.slice(mid);
+            return merge(mergeSort(left_arr), mergeSort(right_arr));
+        }
+        console.log('归并', mergeSort([8, 6, 5, 12, 453, 12, 78, 34, 98, 453, 12]));
+    })(window);
+</script>
+
+<script>
+    // 时间复杂度(可以理解为排序的次数)计算：
+    // (n-1) + (n-2) + ... + 1 = n*(1 + (n-1))/2，所以时间复杂度为 O(n^2)
+    // 冒泡排序
+    // 平均时间复杂度： O(n2)
+    // 最好情况         O(n)
+    // 最坏情况         O(n2)
+    // 空间复杂度       O(1)   In-place
+    ; (global => {
+        function bubbleSort(arr = []) {
+            let leftIndex = arr.length - 1;
+
+            while (leftIndex > 0) {
+                let position = 0;
+                for (let index = 0; index < leftIndex; index++) {
+                    if (arr[index] > arr[index + 1]) {
+                        [arr[index], arr[index + 1]] = [arr[index + 1], arr[index]];
+                        position = index;
+                    }
+                }
+                leftIndex = position;
+            }
+            return arr;
+        }
+        const arr = [1, 45, 927, 36, 4, 2, 436734];
+        bubbleSort(arr);
+        console.log('冒泡排序：', arr)
+    })(window);
+</script>
+
+<script>
+    // 插入排序
+    // 平均时间复杂度   O(n2)
+    // 最好情况         O(n)   最坏情况O(n2)
+    // 空间复杂度  O（1）  稳定
+    ; (global => {
+        function insert(curIndex, readyIndex, arr) {
+            for (let index = readyIndex; index >= 0; index--) {
+                if (arr[curIndex] > arr[index]) {
+                    [arr[index], arr[curIndex]] = [arr[curIndex], arr[index]];
+                    curIndex = index;
+                }
+            }
+        }
+        function insertSort(arr = [2, 1, 4, 23, 67, 12, 92, 735]) {
+            let readyIndex = 0;
+            let sortIndex = 1;
+            let arrLength = arr.length;
+            // debugger;
+            while (sortIndex < arrLength) {
+                insert(sortIndex++, readyIndex++, arr);
+            }
+
+            return arr;
+        }
+        console.log('插入排序', insertSort());
+    })(window);
+</script>
+<script>
+    ; (global => {
+        // 递归快速排序
+        function quickSort_DiGui(arr = [], start = 0, end = arr.length) {
+
+        }
+    })(window);
+</script>
