@@ -114,9 +114,70 @@
 </script>
 <script>
     ; (global => {
-        // 递归快速排序
-        function quickSort_DiGui(arr = [], start = 0, end = arr.length) {
+        // 递归快速排序[8,2,6]
+        function quickSort_DiGui(arr = [], start = 0, end = arr.length - 1) {
+            if (start >= end) return;
+            let pivot = arr[end];
+            let left = start, right = end - 1;
+            // debugger;
+            while (left < right) {
+                while (arr[left] < pivot && left < right) left++;
+                while (arr[right] >= pivot && right > left) right--;
+                [arr[left], arr[right]] = [arr[right], arr[left]];
+            }
+            if (arr[left] >= arr[end]) {
+                [arr[left], arr[end]] = [arr[end], arr[left]];
+            } else {
+                left++;
+            }
+
+            // debugger;
+            quickSort_DiGui(arr, start, left - 1);
+            quickSort_DiGui(arr, left + 1, end);
 
         }
+        // const a = [21, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70];
+        // const a = [9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 0];
+        // const a = [8, 6, 5, 12, 453, 12, 78, 34, 98, 453, 12];
+        // const a = [5, 3, 7, 4, 1, 9, 8, 6, 2];
+        // const a = [12, 3, 54, 7];
+        const a = [2, 1, 3, 4];
+        // const a = [8, 2, 6]
+        quickSort_DiGui(a);
+        console.log('快速排序递归：', a);
+
+        // https://blog.csdn.net/xuyangxinlei/article/details/81062015
+        function quickSort_Iterator(arr = [], start = 0, end = arr.length - 1) {
+            var list = [[start, end]]; // start,end 类似递归入栈
+            while (list.length > 0) {   // 若list不为空，许愿弹出list最后一个数组进行快排 
+                var now = list.pop();   // 弹出pop， 
+                if (now[0] >= now[1]) continue; // 若左右指针相遇，带排序树组长度小于1，则无需进行排序
+
+                let left = now[0], right = now[1], pivot = right;// 一下与递归方法相同
+                while (left < right) {
+                    while (arr[left] < arr[pivot] && left < right) left++;
+                    while (arr[right] >= arr[pivot] && right > left) right--;
+
+                    [arr[left], arr[right]] = [arr[right], arr[left]];
+                }
+                if (arr[left] >= arr[end]) {
+                    [arr[left], arr[end]] = [arr[end], arr[left]];
+                } else {
+                    left++;
+                }
+
+                list.push([now[0], pivot - 1]);  // 将flag 左边数组作为待排序数组，只需将左右指针放入list即可
+                list.push([pivot + 1, now[1]]);  // 将flag 右边数组作为待排序数组，只需将左右指针放入list即可
+            }
+        }
+
+        // const ab = [2, 1, 3, 4];
+        // const ab = [21, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70];
+        // const ab = [9, 8, 7, 6, 5, 4, 3, 2, 1, 1, 0];
+        // const ab = [8, 6, 5, 12, 453, 12, 78, 34, 98, 453, 12];
+        const ab = [5, 3, 7, 4, 1, 9, 1, 8, 6, 2];
+        // const ab = [12, 3, 54, 3, 7];
+        quickSort_Iterator(ab);
+        console.log('ab', ab);
     })(window);
 </script>
