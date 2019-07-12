@@ -1,0 +1,39 @@
+<script>
+    ; (global => {
+
+        function fn() {
+            console.log(this.x);
+        }
+
+        let temp0 = fn.bind({ x: 0 });
+        let temp1 = temp0.bind({ x: 1 })
+
+        console.log(temp0());
+        console.log(temp1())
+    })(window);
+</script>
+
+<script>
+    ; (global => {
+
+        function getClasses(obj = {}) {
+            let classNames = '';
+            for (const [key, value] of Object.entries(obj)) {
+                value && (classNames += `${key} `);
+
+            }
+            return classNames;
+        }
+
+        function getClasses2(obj = {}) {
+            return Object.entries(obj).reduce((acc, cur) => {
+                cur[1] === true && (acc += `${cur[0]} `);
+                return acc;
+            }, '')
+        }
+
+        var obj = { item1: true, itme2: false, item3: true }
+        console.log(getClasses(obj))
+        console.log(getClasses2(obj))
+    })(window);
+</script>
