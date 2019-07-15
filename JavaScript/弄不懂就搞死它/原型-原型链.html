@@ -1,0 +1,90 @@
+<p>针对这篇文章的质疑 https://www.cnblogs.com/libin-1/p/5820550.html</p>
+<p>手撸代码来验证</p>
+
+<footer>will be end</footer>
+<script>
+    ; (global => {
+        const { log: __log, group: __group, groupEnd: __groupEnd } = console;
+        __group('Object.prototyp.__proto__  === null');
+        __log(Object.prototype.__proto__ === null);
+        __groupEnd();
+
+        __group('字面量方式的对象{}')
+        var a = {};
+        __log(a.prototype === void 0, ' is undefined');
+        __log(a.__proto__ === Object.prototype, ' is Object.prototype')
+        __log(a.__proto__ === Object, 'is not Object')
+        __log(a.constructor, '{} 和 new Object() 是一样的，所以{} 具有构造函数')
+        __log(a.constructor === Object.prototype.constructor, '这里验证上面的逻辑 {} 和 new Object() 一样')
+        __groupEnd();
+
+        var b = function () { }
+        __group('b = function(){}')
+        __log(b.prototype, '至少含有constructor、__proto__的对象')
+        __log(b.prototype.__proto__ === Object.prototype, 'b.prototype.__proto__ 指向Object.prototype')
+        __log(b.__proto__ === Function.prototype, '是Function.prototype （f(){[native code]}）')
+        __groupEnd();
+
+        __group('new b()')
+        var nb = new b();
+        __log(nb);
+        __log(nb.prototype, 'nb 被new后是一个对象，没有prototype属性')
+        __log(nb.__proto__ === b.prototype, '原型链应该是b的原型')
+        __groupEnd();
+
+        __group('Object.create(o:any, properties) 创建一个对象')
+        var a_prototyp = {};
+        var ab = Object.create(a_prototyp, {
+            o1: {
+                value: 100
+            },
+            o2: {
+                get: function () { return 101; }
+            }
+        });
+        __log(ab);
+        __log(ab.__proto__ === a_prototyp, '__proto__指定了原型')
+        __log(ab.o1, 'is 100?');
+        __log(ab.o2, 'is 101?');
+
+        __groupEnd();
+
+
+        __log('instanceof 运算符 判断 构造函数的原型 是否在 实例对象 的原型链存在')
+        __group('Funcition 是 Object 的实例？ js一切皆对象')
+        __log(Function instanceof Object);
+        __groupEnd();
+        __group('Object 是 Function 的实例？ js一切皆对象')
+        __log(Object instanceof Function);
+        __groupEnd();
+
+        // // Node  原型链
+        // var Obj = function () { };
+        // var o = new Obj();
+        // o.__proto__ === Obj.prototype;  //=> true 
+        // o.__proto__.constructor === Obj; //=> true
+
+        // Obj.__proto__ === Function.prototype; //=> true 
+        // Obj.__proto__.constructor === Function; //=> true
+
+        // Function.__proto__ === Function.prototype; //=> true 
+        // Object.__proto__ === Object.prototype;     //=> false 
+        // Object.__proto__ === Function.prototype;   //=> true
+
+        // Function.__proto__.constructor === Function;//=> true 
+        // Function.__proto__.__proto__;               //=> {} 
+        // Function.__proto__.__proto__ === o.__proto__.__proto__; //=> true 
+        // o.__proto__.__proto__.__proto__ === null;   //=> true
+
+        // var Obj = function () { };
+        // var o = new Obj();
+
+        // o instanceof Obj; //=> true 
+        // o instanceof Object; //=> true 
+        // o instanceof Function; //=> false
+
+        // o.__proto__ === Obj.prototype; //=> true 
+        // o.__proto__.__proto__ === Object.prototype; //=> true 
+        // o.__proto__.__proto__ === Function;  //=> false
+    })(window);
+</script>
