@@ -1,0 +1,23 @@
+<article>
+    <h2>new 应该是来用作继承的</h2>
+</article>
+
+<script>
+    function snew(constructor, ...args) {
+        var o = Object.create(constructor.prototype);
+        var result = constructor.apply(o, args);
+
+        return typeof result === 'object' && result !== null ? result : o;
+    }
+
+    /**
+     * 9号技师
+     * **/
+    function Wnew() {
+        Constructor = [].shift.call(arguments);
+
+        var obj = Object.create(Constructor.prototype);
+        var result = Constructor.apply(obj, arguments);
+        return typeof result === 'object' ? result || obj : obj;
+    }
+</script>
