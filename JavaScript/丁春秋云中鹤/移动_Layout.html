@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta http-equiv="x-rim-auto-match" content="none">
+
+    <title>流程管理平台</title>
+
+    <style>
+        .navbar_tab span {
+            color: #a0a0a0;
+        }
+
+        .navbar_tab span.active {
+            color: #21997d;
+            border-bottom: 3px solid #21997d;
+        }
+    </style>
+</head>
+
+<body style="background-color:white!important;">
+    <script type="text/javascript">
+        // 导航巡航
+        ; (function (global, factory, plugin) {
+            factory.call(global, global.jQuery, plugin);
+        })(this, function ($, plugin) {
+
+            $.fn[plugin] = function (options) {
+                options = options || {};
+
+                var navCss = options["navCss"] || {
+                    "display": "none",
+                    "position": "fixed",
+                    "top": "0",
+                    "z-index": "920201",
+                    "padding": "5px 0",
+                    "background-color": "#fff",
+                    "border-bottom": "1px solid #ececec"
+                }, deviation = options["offsetDeviation"] || 50;
+
+                // 筛选器惟一性校验
+                if (this.length !== 1) {
+                    if (console && console.warn) {
+                        console.warn('选择器得到的数目不唯一');
+                    }
+                    return false;
+                }
+
+                // 3. bind click
+                $('body').on('click', '.navbar_tab', function () {
+                    var $this = $(this),
+                        anchor = $this.data('anchor'),
+                        eleAnchor = $(anchor),
+                        gunTo = eleAnchor.offset().top - deviation;
+
+                    if (eleAnchor.length != 1) {
+                        if (console && console.warn) {
+                            console.warn('tab id不唯一');
+                        }
+                        return false;
+                    }
+                    if (anchor === '#tab_1') {
+                        gunTo = 0;
+                    }
+
+                    $("html,body").animate({ scrollTop: gunTo }, 500);
+                });
+
+                return this.each(function () {
+                    navCopy(this, navCss, deviation);
+                });
+            }
+
+            function navCopy(obj, navCss, deviation) {
+                // 1. copy nav html
+                var eleTabs = $(obj).find('.navbar_tab[data-anchor]:visible'),
+                    eleClone = $('<div id="aya_navbar" class="navbar"></div>').css(navCss);
+                if (!eleTabs.length) {
+                    return false;
+                }
+
+                eleTabs.each(function (index, item) {
+                    eleClone.append(item.outerHTML);
+                });
+                eleClone.appendTo($("body"));
+
+                // 2. listen scroll
+                $(window).on('scroll', debounceGun(true, gun, { 'jq': eleTabs, 'deviation': deviation }));
+            };
+
+            function debounceGun() {
+                var callback = arguments[0],
+                    immediately = false,
+                    timer = null,
+                    args = arguments;
+
+                if (typeof callback === 'boolean') {
+                    immediately = callback;
+                }
+                if (typeof callback !== 'function') {
+                    callback = arguments[1];
+                }
+                if (typeof callback !== 'function') {
+                    if (console && console.warn) {
+                        console.warn('参数不合法');
+                    }
+                    return false;
+                }
+                if (args.length > 2) {
+                    args = args[2];
+                }
+                if (immediately) {
+                    callback(args);
+                }
+
+                return function () {
+                    if (timer) {
+                        clearTimeout(timer);
+                        timer = setTimeout(function () { callback(args); }, 200);
+                    } else {
+                        timer = setTimeout(function () { callback(args); }, 200);
+                    }
+                }
+            }
+
+            // Gun
+            function gun(options) {
+                options = options || {};
+
+                var jqtabs = options['jq'] || [],
+                    deviation = options['deviation'] || 50,
+                    objtabs = [],
+                    windowtop = $(window).scrollTop();
+
+                if (!jqtabs.length) {
+                    return false;
+                }
+                jqtabs.each(function (index, jqitem) {
+                    var anchor = $(jqitem).data('anchor');
+                    objtabs.push({
+                        'sl': anchor,
+                        'top': $(anchor).offset().top
+                    });
+                });
+
+                var firstTab = objtabs[0],
+                    secondTab = objtabs[1],
+                    lastTab = objtabs[objtabs.length - 1];
+
+                $('.navbar_tab span').removeClass('active');
+
+                // 判断第一个Tab区间值
+                if (windowtop < secondTab.top - deviation - 1) {
+                    $('.navbar_tab[data-anchor="' + firstTab.sl + '"] span').addClass('active');
+                }
+                // 判断最后一个Tab区间值
+                else if (windowtop >= lastTab.top - deviation - 1) {
+                    $('.navbar_tab[data-anchor="' + lastTab.sl + '"] span').addClass('active');
+                }
+                // 中间Tab,如果Tab大于四个，用二分法查找吧
+                else {
+                    $('.navbar_tab[data-anchor="' + secondTab.sl + '"] span').addClass('active');
+                }
+                if (!$('body').hasClass('aya_maya')) {
+                    window.aya_scrollTop = windowtop;
+                }
+                if (windowtop > 110) {
+                    $('#aya_navbar').slideDown(300);
+                } else {
+                    $('#aya_navbar').slideUp(250);
+                }
+            }
+        }, 'navCuise');
+
+        $(function () {
+            $('.navbar').navCruise();
+        });
+    </script>
+</body>
+
+</html>
+
+<script>
+    ; (global => {
+        const arr = [2, 4, 6, 8, 10];
+        function search(sval = 7) {
+            let mid_index = Math.floor(arr.length / 2);
+            let left_index = right_index = mid_index;
+
+            while (sval < arr[left_index] || sval > arr[right_index]) {
+                let mid_value = arr[mid_index];
+                if (sval > mid_value) {
+                    left_index = mid_index++;
+                } else if (sval < mid_value) {
+                    right_index = mid_index--;
+                } else {
+                    break;
+                }
+            }
+            console.log(left_index, mid_index, right_index);
+        }
+        search();
+    })(window);
+</script>
