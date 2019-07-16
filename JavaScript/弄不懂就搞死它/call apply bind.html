@@ -1,0 +1,279 @@
+<article>
+    <section>
+        <h1>call() 和 apply() 都是为了改变某个函数运行时的上下文</h1>
+        <strong>土话：改变函数内部的this指向</strong>
+        <strong>白话：对象冒充</strong>
+        <p>两者的作用完全一样</p>
+        <p>仅是接收的参数方式不同</p>
+        <code>
+           <pre>call(thisArg[, arg1[, ...]])</pre>
+           <pre>apply(thisArg[, [arg1,...]])</pre>
+       </code>
+        <section>
+            <h1>用途</h1>
+            <ul>
+                <li>数组之间的追加</li>
+                <li>获取数组中的最大值和最小值</li>
+                <li>类数组/伪数组 使用数组方法</li>
+            </ul>
+        </section>
+        <ul>
+            <li>apply, call, bind 都能改变函数的this指向</li>
+            <li>apply, call, bind 第一个参数都是this指向的对象</li>
+            <li>apply, call, bind 可以利用后续参数传参</li>
+            <li>bind 返回对应函数，便于稍后调用； apply, call 则是立即执行</li>
+        </ul>
+    </section>
+    <section>
+
+    </section>
+</article>
+
+<script>
+    ; (global => {
+        const { log, group, groupEnd } = console;
+
+        group('call() apply() 对象冒充');
+        (function () {
+            function Person() { }
+            Person.prototype = {
+                sex: 'man',
+                say: function () {
+                    log('i am ', this.sex);
+                }
+            }
+
+            var a = new Person();
+            a.say();                  // i am man
+            var B = { sex: 'female' }
+            a.say.call(B);            // i am feamle
+            a.say.bind(B)();          // i am feamle
+            // Person.say.call(B); 只有实例化后才能调用
+        })();
+        groupEnd();
+
+        group('小试牛刀');
+        (function () {
+            function fnLog() {
+                // console.log.apply(null, [].slice.call(arguments, 0))
+                const args = arguments;
+                console.log.apply(null, args);
+            }
+            fnLog(1);
+            fnLog(1, 2);
+            fnLog(1, 2, 3);
+        })();
+        groupEnd();
+
+        group('数组追加');
+        (function () {
+            var arr1 = [1, 2, 3, 4, 6];
+            var arr2 = [, 0, 9, 8];
+            // 将arr2 push进arr1
+            [].push.apply(arr1, arr2);
+            log(arr1);
+        })();
+        groupEnd();
+
+        group('数组最大值');
+        (function () {
+            var maxNum = Math.max.apply(Math, [12, 54, 672]);
+            log(maxNum);
+        })();
+        groupEnd();
+
+        group('举一反三');
+        (function () {
+            this.num = 1;
+            var mymodule = {
+                num: 2,
+                getNum: function () {
+                    log(this.num);
+                }
+            }
+            mymodule.getNum();       // 2
+            var a = mymodule.getNum;
+            a();                     // 1
+            // 怎样才能让a函数输出2呢？
+            var b = a.bind(mymodule);
+            b();                     // 2
+            a.call(mymodule);        // 2
+        })();
+        groupEnd();
+
+        group('bind 打脸');
+        (function () {
+            var bar = function () { log(this.x) }
+
+            var foo = { x: 0 }
+            var foo1 = { x: 1 }
+            var foo2 = { x: 2 }
+
+            var func = bar.bind(foo);
+            func();
+            var func1 = bar.bind(foo).bind(foo1);
+            func1();
+            var func2 = bar.bind(foo).bind(foo1).bind(foo2);
+            func2();
+            // 0, 0, 0
+        })();
+        groupEnd();
+    })(window);
+</script>
+
+<script>
+    ; (global => {
+        console.group('手写bind')
+
+        // 手写bind
+        Function.prototype.bind_es5 = function (thisArg) {
+            var self = this;
+            var args = [].slice.call(arguments, 1);
+            return function () {
+                var bindArgs = [].slice.call(arguments);
+                return self.apply(thisArg, args.concat(bindArgs));
+            }
+        };
+        Function.prototype.bind_es6 = function (thisArg, ...args) {
+            const self = this;
+            return function () {
+                return self.apply(thisArg, [...args, ...arguments]);
+            }
+        };
+
+        function F(x = 1, y = 2) {
+            this.x = x;
+            this.y = y;
+        };
+        F.prototype.sum = function (z = 0) {
+            console.log('sum args:', [].slice.call(arguments));
+            return this.x + this.y + z;
+        }
+        F.prototype.sum.x = 100;
+
+
+        var f = new F();
+        var v = f.sum(1000);
+        console.log('sum 1000', v);
+
+        var bind_sum = f.sum.bind({ x: 2, y: 2 }, 100)
+        var v_bind = bind_sum(1000);
+        console.log('v_bind', v_bind);
+
+        var bind_es6_sum = f.sum.bind_es6({ x: 2, y: 2 }, 100);
+        var v_bind_es6 = bind_es6_sum(1000);
+        console.log('v_bind_es6', v_bind_es6);
+
+        var bind_es5_sum = f.sum.bind_es5({ x: 2, y: 2 }, 100);
+        var v_bind_es5 = bind_es5_sum(1000);
+        console.log('v_bind_es5', v_bind_es5)
+
+        console.groupEnd();
+    })(window);
+</script>
+
+<script>
+    ; (global => {
+        console.group('手写call')
+        // 手写  call apply 
+        Function.prototype.call_es5 = function (thisArg) {
+            thisArg = thisArg || window;
+            thisArg.fn = this;
+
+            var args = [], len = arguments.length;
+            for (let index = len - 1; index > 0; index--) {
+                args.unshift(arguments[index]);
+            }
+
+            var result = eval('thisArg.fn(' + args + ')');
+
+            delete thisArg.fn;
+            return result;
+        }
+
+        Function.prototype.call_es6 = function (thisArg, ...args) {
+            thisArg = thisArg || window;
+            thisArg.fn = this;
+
+            const result = thisArg.fn(...args);
+
+            delete thisArg.fn;
+            return result;
+        }
+
+        function F(x = 1, y = 2) {
+            this.x = x;
+            this.y = y;
+        };
+        F.prototype.sum = function (z = 0) {
+            // console.log('sum args:', [].slice.call(arguments));
+            return this.x + this.y + z;
+        }
+
+        var f = new F();
+        var v = f.sum(1000);
+        console.log('sum', v);
+
+        var v_call = f.sum.call({ x: 2, y: 2 }, 1000)
+        console.log('v_call', v_call)
+
+        var v_call_es6 = f.sum.call_es6({ x: 2, y: 2 }, 1000)
+        console.log('v_call_es6', v_call_es6)
+
+        var v_call_es5 = f.sum.call_es5({ x: 2, y: 2 }, 1000)
+        console.log('v_call_es5', v_call_es5)
+
+        console.groupEnd();
+    })(window);
+</script>
+
+<script>
+    ; (global => {
+        console.group('手写apply')
+        // 手写  call apply 
+        Function.prototype.apply_es5 = function (thisArg, argArr) {
+            thisArg = thisArg || window;
+            thisArg.fn = this;
+
+            !Array.isArray(argArr) && (argArr = []);
+
+            var result = eval('thisArg.fn(' + argArr + ')');
+
+            delete thisArg.fn;
+            return result;
+        }
+
+        Function.prototype.apply_es6 = function (thisArg, argArr) {
+            thisArg = thisArg || window;
+            thisArg.fn = this;
+
+            const result = thisArg.fn(...argArr);
+
+            delete thisArg.fn;
+            return result;
+        }
+
+        function F(x = 1, y = 2) {
+            this.x = x;
+            this.y = y;
+        };
+        F.prototype.sum = function (z = 0) {
+            return this.x + this.y + z;
+        }
+
+        var f = new F();
+        var v = f.sum(1000);
+        console.log('sum', v);
+
+        var v_apply = f.sum.apply({ x: 2, y: 2 }, [1000])
+        console.log('v_apply', v_apply)
+
+        var v_apply_es6 = f.sum.apply_es6({ x: 2, y: 2 }, [1000])
+        console.log('v_apply_es6', v_apply_es6)
+
+        var v_apply_es5 = f.sum.apply_es5({ x: 2, y: 2 }, [1000])
+        console.log('v_apply_es5', v_apply_es5)
+
+        console.groupEnd();
+    })(window);
+</script>
