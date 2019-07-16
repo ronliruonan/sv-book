@@ -1,0 +1,27 @@
+<article>
+<section>
+    <h1>闭包好处</h1>
+    1. 避免污染window其他变量，保护自己的变量
+    2. 作用域： 私有作用域查找比较全局作用域来说，快
+</section>
+<section>
+    <h1>闭包坏处</h1>
+    1. 变量 会一直存在闭包中，容易内存溢出
+</section>
+<pre>
+    1. 原型共享 
+    jQuery.prototype.init.prototype jQuery.prototype;
+
+    2. jQuery.fn = jQuery.prototype
+
+    3. window.jQuery = window.$ = jQuery
+
+    4. 链式调用
+
+    5. 事件委托
+</pre>
+</article>
+
+<script>
+
+</script>
