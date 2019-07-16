@@ -1,0 +1,155 @@
+<div id='id' class="default sb">ClassList神操作</div>
+
+<script>
+    // ; (global => {
+    //     class MyList {
+    //         constructor(el) {
+    //             this.el = el;
+    //             this.value = this.el.className + '';
+    //             this.__classes = this.value.split(' ');
+    //         }
+
+    //         contains(className) {
+    //             return [].indexOf.call(this.__classes, className) > -1;
+    //         }
+    //         add(className) {
+    //             !this.contains(className) && [].push.call(this.__classes, className);
+    //             this.value = [].join.call(this.__classes, ' ');
+    //             this.el.className = this.value;
+    //         }
+    //         remove(className) {
+    //             if (!this.contains(className)) return;
+
+    //             [].splice.call(this.__classes, [].indexOf.call(this.__classes, className), 1);
+    //             this.value = [].join.call(this.__classes, ' ');
+    //             this.el.className = this.value;
+    //         }
+    //         toggle(className) {
+    //             if (this.contains(className)) {
+    //                 this.remove(className);
+    //             } else {
+    //                 this.add(className);
+    //             }
+    //         }
+    //     }
+    //     Object.defineProperty(HTMLElement.prototype, 'myClassList', {
+    //         get: function () {
+    //             // this 当前element
+    //             const mylist = new MyList(this);
+    //             return mylist;
+    //         }
+    //     });
+
+
+    //     var el = document.querySelector('#id');
+    //     // console.log(el.classList);
+
+    //     // console.log(el.myClassList)
+    // })(window);
+</script>
+<!-- <script>
+    ; (global => {
+        class MyDomTokenList {
+            constructor(el) {
+                this.__clazzs__ = el.className.split(' ');
+
+                Object.defineProperty(this, 'value', {
+                    get: function () {
+                        return el.className;
+                    },
+                    set: function (newVal) {
+                        el.className = newVal;
+                    }
+                })
+            }
+            add(clazz) {
+                !this.contains(clazz) && [].push.call(this.__clazzs__, clazz);
+                this.value = [].join.call(this.__clazzs__, ' ');
+            }
+            remove(clazz) {
+                if (!this.contains(clazz)) return;
+                [].splice.call(this.__clazzs__, [].indexOf.call(this.__clazzs__, clazz), 1);
+                this.value = [].join.call(this.__clazzs__, ' ');
+            }
+            contains(clazz) {
+                return [].indexOf.call(this.__clazzs__, clazz) > -1;
+            }
+            toggle(clazz) {
+                this.contains(clazz) ? this.remove(clazz) : this.add(clazz);
+            }
+        }
+        MyDomTokenList.__proto__ = Array.prototype;
+
+        Object.defineProperty(HTMLElement.prototype, 'myClassList', {
+            get: function () {
+                if (!this.__dtl__) {
+                    this.__dtl__ = new MyDomTokenList(this);
+                }
+                return this.__dtl__;
+            }
+        });
+
+        var el = document.querySelector('#id');
+        console.log(el.classList);
+        console.log(el.myClassList);
+        el.myClassList.add('sbadd');
+        // el.myClassList.remove('sbadd');
+        console.log(el.myClassList.contains('sbadd'));
+        el.myClassList.toggle('sbadd');
+        el.myClassList.toggle('sbadd');
+        console.log(el.myClassList.value);
+    })(window)
+</script> -->
+
+<script>
+    ; (global => {
+        class MyDomTokenList {
+            constructor(el) {
+
+                Object.defineProperty(this, 'value', {
+                    get: function () {
+                        return el.className;
+                    },
+                    set: function (newVal) {
+                        el.className = newVal;
+                    }
+                })
+            }
+            add(clazz) {
+                !this.contains(clazz) && [].push.call(this, clazz);
+                this.value = [].join.call(this, ' ');
+            }
+            remove(clazz) {
+                if (!this.contains(clazz)) return;
+                [].splice.call(this, [].indexOf.call(this, clazz), 1);
+                this.value = [].join.call(this, ' ');
+            }
+            contains(clazz) {
+                return [].indexOf.call(this, clazz) > -1;
+            }
+            toggle(clazz) {
+                this.contains(clazz) ? this.remove(clazz) : this.add(clazz);
+            }
+        }
+
+        Object.defineProperty(HTMLElement.prototype, 'myClassList', {
+            get: function () {
+                if (!this.__dtl__) {
+                    this.__dtl__ = this.className.split(' ');
+                    this.__dtl__.__proto__ = new MyDomTokenList(this);
+                }
+                return this.__dtl__;
+            }
+        });
+
+        var el = document.querySelector('#id');
+        console.log(el.classList);
+        console.log(el.myClassList);
+        el.myClassList.add('sbadd');
+        // el.myClassList.remove('sbadd');
+        console.log(el.myClassList.contains('sbadd'));
+        el.myClassList.toggle('sbadd');
+        el.myClassList.toggle('sbadd');
+        console.log(el.myClassList.value);
+    })(window)
+</script>
