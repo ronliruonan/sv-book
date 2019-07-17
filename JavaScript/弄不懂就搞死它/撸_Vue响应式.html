@@ -1,0 +1,201 @@
+<article id='app'>
+    <h2>数据响应式</h2>
+    <div>
+        <div v-text='myText'></div>
+        <div v-text='myText'></div>
+        <div v-text='myBox'></div>
+        <div v-text='myBox'></div>
+        <input type="text" v-model="myText" />
+    </div>
+</article>
+
+<script>
+    ; (global => {
+        // // 1. 实现一个架构(MVVM类或者VUE类、Water类)
+        // // 2. 实现MVVM中的M->V,把模型里面的数据绑定到视图
+        // // 3. (1) 最后实现 v-m, 当文本框的事件
+        // //   （2）
+
+        // // 发布者
+        // class Vue {
+        //     constructor(options) {
+        //         this.options = options;
+        //         this.$data = options.data; // 获取数据
+        //         this.$el = document.querySelector(options.el); // 获取对象
+
+        //         this._directive = {}; // 订阅者容器
+        //         // {myText:[订阅者1， 订阅者2], myBox:[订阅者1，订阅者2]}
+
+        //         // 初始化
+        //         this.Observer(this.$data);
+        //         this.Complie(this.$el);
+        //     }
+
+        //     // 劫持监听所有的属性
+        //     Observer(data) {
+        //         for (let key in data) {
+        //             this._directive[key] = [];
+
+        //             // this.$data的每一个值发生改变都要更新视图
+        //             let val = data[key],
+        //                 watchers = this._directive[key];
+        //             Object.defineProperty(this.$data, key, {
+        //                 get: function () {
+        //                     return val;
+        //                 },
+        //                 set: function (newVal) {
+        //                     if (newVal === val) return;
+        //                     val = newVal;
+        //                     watchers.forEach(watch => {
+        //                         watch.update();
+        //                     })
+        //                 }
+        //             })
+        //         }
+        //     }
+        //     // 指令解析  订阅者
+        //     Complie(el) {
+        //         let nodes = el.children,
+        //             len = nodes.length;
+        //         for (let i = len - 1; i >= 0; i--) {
+        //             let node = nodes[i];
+        //             // 递归
+        //             node.children.length && this.Complie(node);
+        //             // 怎么添加订阅者
+        //             if (node.hasAttribute('v-text')) {
+        //                 let attrVal = node.getAttribute('v-text'),
+        //                     watcher = new Watcher(node, this, attrVal, 'innerText');
+        //                 this._directive[attrVal].push(watcher);
+        //             }
+        //             if (node.hasAttribute('v-model')) {
+        //                 let attrVal = node.getAttribute('v-model'),
+        //                     watcher = new Watcher(node, this, attrVal, 'value');
+
+        //                 node.addEventListener('input', (function () {
+        //                     return function () {
+        //                         this.$data[attrVal] = node.value;
+        //                     }
+        //                 })().bind(this), false);
+        //             }
+        //         }
+        //     }
+        // }
+        // // 订阅者 
+        // class Watcher { // 主要是更新视图
+        //     constructor(el, vm, exp, attr) {
+        //         this.el = el;
+        //         this.vm = vm;
+        //         this.exp = exp;
+        //         this.attr = attr;
+
+        //         this.update(); // 初始化视图
+        //     }
+        //     update() {
+        //         // div.innerText = vueObj.$data['myText']
+        //         // input.value = vueObj.$data['myText']
+        //         this.el[this.attr] = this.vm.$data[this.exp];
+        //     }
+
+        // }
+
+        // const app = new Vue({
+        //     el: '#app',
+        //     data: {
+        //         myText: '双向吃鸡',
+        //         myBox: ' box'
+        //     }
+        // })
+    })(window);
+
+</script>
+
+<script>
+    ; (function (global) {
+
+        // 创建一个框架
+        class MVVM {
+            constructor(options) {
+                this.$el = document.querySelector(options.el);
+                this.$data = options.data;
+
+                this.__Dep__ = {};
+
+                this.Observer(this.$data);
+                this.Compile(this.$el);
+            }
+            // 劫持所有属性
+            Observer(data) {
+                for (const key in data) {
+                    this.__Dep__[key] = [];
+
+                    let val = data[key],
+                        watchers = this.__Dep__[key];
+
+                    Object.defineProperty(this.$data, key, {
+                        get: function () { return val },
+                        set: function (newVal) {
+                            if (newVal === val) return;
+                            val = newVal;
+                            watchers.forEach(ele => ele.update());
+                        }
+                    })
+                }
+            }
+            // 指令解析
+            Compile(el) {
+                let nodes = el.children,
+                    nodesLen = nodes.length;
+                for (let i = nodesLen - 1; i >= 0; i--) {
+                    let node = nodes[i];
+                    // 递归
+                    node.children.length && this.Compile(node);
+                    if (node.hasAttribute('v-text')) {
+                        this.DepAdd(node, 'v-text', 'innerText');
+                    }
+                    if (node.hasAttribute('v-model')) {
+                        this.DepAdd(node, 'v-model', 'value');
+
+                        let attrVal = node.getAttribute('v-model');
+                        node.addEventListener('input', (function () {
+                            return function () {
+                                this.$data[attrVal] = node.value;
+                            }
+                        })().bind(this), false);
+                    }
+                }
+                console.log(this.__Dep__);
+            }
+
+            DepAdd(node, attr, exp) {
+                let attrVal = node.getAttribute(attr),
+                    // div.innterText = this.$data[mytext]
+                    watcher = new Watcher(node, this, attrVal, exp)
+                this.__Dep__[attrVal].push(watcher);
+            }
+        }
+        class Watcher {
+            constructor(el, vm, attr, exp) {
+                this.el = el;
+                this.vm = vm;
+                this.attr = attr;
+                this.exp = exp;
+
+                // 初始化视图
+                this.update();
+            }
+
+            update() {
+                this.el[this.exp] = this.vm.$data[this.attr];
+            }
+        }
+
+
+        new MVVM({
+            el: '#app',
+            data: {
+                myBox: '我的box',
+                myText: 'My Text'
+            }
+        });
+    })(this);
+</script>
