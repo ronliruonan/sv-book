@@ -1,5 +1,12 @@
 <article id='app'>
-    <h2>数据响应式</h2>
+    <section>
+        <p>2.x 劫持不到的场景，解决方案是什么？</p>
+        <pre>
+            1. 给对象新增属性
+            2. 数组内部数据变化 [].push()
+        </pre>
+    </section>
+    <h2>数据响应式 Object.defineProperty</h2>
     <div>
         <div v-text='myText'></div>
         <div v-text='myText'></div>
@@ -7,6 +14,12 @@
         <div v-text='myBox'></div>
         <input type="text" v-model="myText" />
     </div>
+
+    <section>
+        <h2>Proxy</h2>
+        <div id='div_proxy'></div>
+        <input id='input_proxy' type="text">
+    </section>
 </article>
 
 <script>
@@ -198,4 +211,67 @@
             }
         });
     })(this);
+</script>
+
+<script>
+    ; (global => {
+        const div = document.querySelector('#div_proxy'),
+            input = document.querySelector('#input_proxy');
+
+        const data = {
+            txt: 'txt proxy'
+        };
+        const handler = {
+            set: function (target, prop, value) {
+                if (prop === 'txt') {
+                    // 更新值
+                    target[prop] = value;
+                    // 更新视图
+                    div.innerText = value;
+                    input.value = value;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        const mytxt = new Proxy(data, handler);
+        input.addEventListener('input', function (e) {
+            mytxt.txt = e.target.value;
+        }, false);
+
+        mytxt.txt = data.txt; // 初始化值
+    })(this);
+</script>
+
+<script>
+    const arr = [1, 2, 4, { a: 1 }];
+    const proxy = new Proxy(arr, {
+        set: function (target, prop, newVal) {
+            console.group('number[] proxy');
+
+            console.log('有人来动我：', prop, newVal);
+
+            console.groupEnd();
+        }
+    });
+
+    proxy[3] = 110;
+    console.log(arr);
+
+    const obj = { a: 1, b: 2 }
+    const proxy_obj = new Proxy(obj, {
+        get: function (target, prop) {
+            return 10000;
+        },
+        set: function (target, prop, newVal) {
+            console.log(prop);
+            target[prop] = newVal;
+        }
+    });
+
+    proxy_obj['a'] = 100;
+    // proxy_obj.b = 1000;
+    console.log(proxy_obj.a);
+    console.log(obj);
 </script>

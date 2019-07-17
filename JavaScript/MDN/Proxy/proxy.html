@@ -1,0 +1,56 @@
+<article>
+    <h2>Proxy 对象用于定义基本操作的自定义行为</h2>
+    <section>
+        <h2>语法</h2>
+        <code>
+            let p = new Proxy(target, handler);
+        </code>
+    </section>
+</article>
+
+<script>
+    ; (global => {
+        // 当对象中不存在属性名时，缺省值返回37
+        let handler = {
+            get: function (target, prop) {
+                return prop in target ? target[prop] : 37;
+            }
+        }
+        let p = new Proxy({}, handler);
+        p.a = 1, p.b = void 0;
+
+        console.log(p.a, p.b);       // 1 void 0 
+        console.log('c' in p, p.c);  // false  37
+    })(this);
+</script>
+<script>
+    ; (function (global) {
+        let target = {};
+        let p = new Proxy(target, {});
+        p.a = 37; // 操作转发到目标
+        console.log(target.a);
+    })(this);
+</script>
+
+<script>
+    ; (function (global) {
+        console.group('验证');
+        let validator = {
+            set: function (target, prop, value) {
+                if (prop === 'age') {
+                    if (!Number.isInteger(value)) throw new TypeError('The age is not an integer');
+                    if (value > 200) throw new RangeError('The age seems invalid');
+                }
+                target[prop] = value;
+            }
+        };
+
+        let person = new Proxy({}, validator);
+        person.age = 100;
+        console.log(person.age, '   100???');
+
+        // person.age = 'yong';
+        // person.age = 200000;
+        console.groupEnd();
+    })(this);
+</script>
