@@ -1,0 +1,381 @@
+http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html
+<article>
+    <section>
+        <h2>基本概念</h2>
+        <p>采用Flex布局的元素，成为Flex容器</p>
+    </section>
+    <section>
+        <h2>容器的属性</h2>
+        <p>这6个属性设置在容器上</p>
+        <ul>
+            <li>
+                flex-direction
+                <p>决定主轴的方向</p>
+                <code>
+                    .box{
+                        flex-direction: row | row-reverse | column | column-reverse
+                    }
+                </code>
+                <p>row（默认值）：主轴水平方向，起点在左端</p>
+            </li>
+            <li>
+                flex-wrap
+                <p>如果一条轴线排不下，如何换行</p>
+                <code>
+                        .box{
+                            flex-wrap: nowrap | wrap | wrap-reverse
+                        }
+                    </code>
+                <p>nowrap（默认值）：不换行</p>
+            </li>
+            <li>flex-flow
+                <p>是flex-direction & flex-wrap的简写</p>
+                <code>
+                    .box{
+                        flex-flow:  flex-direction || flex-wrap
+                    }
+                </code>
+                <p>默认：row nowrap</p>
+            </li>
+            <li>justify-content
+                <p>定义主轴上的对齐方式</p>
+                <code>
+                    .box{
+                        justify-content: flex-start | flex-end | center | space-between | space-around;
+                    }
+                </code>
+                <p>默认：flex-start</p>
+            </li>
+            <li>align-items
+                <p>flex项目在交叉轴上如何对齐</p>
+                <code>
+                    .box{
+                        justify-items: flex-start | flex-end | center | baseline | stretch;;
+                    }
+                </code>
+                <p>默认：stretch</p>
+            </li>
+            <li>align-content
+                <p>定义多跟轴线的对齐方式，如果只有一根轴线，不起作用</p>
+                <code>
+                    .box{
+                        align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+                    }
+                </code>
+                <p>默认：stretch</p>
+            </li>
+        </ul>
+    </section>
+    <section>
+        <h2>容器内的元素属性</h2>
+        <p>6个属性 设置在item上</p>
+        <ul>
+            <li>order
+                <p>定义item的排列数序,越小越前</p>
+                <code>.item{ order: 0}</code>
+            </li>
+            <li>flex-grow
+                <p>定义放大比例, 默认0，表示不去放大项目</p>
+                <code>.item{ flex-grow: 0}</code>
+                <p>如果所有的item的都是1，那么等分；如果一个item为2，其他为1，那么剩余控件占比多一倍</p>
+            </li>
+            <li>flex-shrink
+                <p>定义缩小比例，默认1</p>
+                <code>.item{ flex-shrink: 1}</code>
+                <p>如果所有的都是1，当空间不足时，将等比缩小。如果一个为0，其他为1时，那么0那个不小小</p>
+            </li>
+            <li>flex-basis
+                <p>定义占据空间，默认auto</p>
+                <code>.item{ flex-basis: length | auto;}</code>
+            </li>
+            <li>flex
+                <p>是flex-growp, flex-shrink, flex-basis: 0 1 auto</p>
+                <code>.item{ flex-basis: length | auto;}</code>
+            </li>
+            <li>align-self
+                <p>允许item与其他item不一样的对齐方式</p>
+                <code>.item{ align-self: auto | flex-start | flex-end | center | baseline | stretch;}</code>
+            </li>
+        </ul>
+    </section>
+</article>
+<section>
+    <h2>3宫格</h2>
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .box_3 {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .box_3-item {
+            width: 32%;
+            height: 200px;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            background-color: #e5e5e5;
+        }
+    </style>
+    <section class="box_3">
+        <div class="box_3-item">1111111111111
+            <pre>
+            asdf
+        </pre>111111111111111111111</div>
+        <div class="box_3-item">2</div>
+        <div class="box_3-item">3</div>
+    </section>
+    <section class="box_3">
+        <div class="box_3-item">1111111111111
+            <pre>
+                asdf
+            </pre>111111111111111111111</div>
+        <div class="box_3-item">2</div>
+        <div class="box_3-item">3</div>
+    </section>
+</section>
+
+<section>
+    <h2>筛子布局</h2>
+    <p>这是不是BFC塌了</p>
+    <style>
+        .shaizi {
+            display: inline-flex;
+            width: 120px;
+            height: 120px;
+            padding: 20px;
+            margin: 10px;
+            margin-top: 20px;
+            background: #eee;
+        }
+
+        .pip {
+            display: block;
+            width: 24px;
+            height: 24px;
+            background: #000;
+            border-radius: 50%;
+        }
+
+        .shaizi-1 {
+            justify-content: center;
+            align-items: center;
+        }
+
+        .shaizi-2 {
+            justify-content: space-between;
+            /* align-items: center; */
+        }
+
+        .shaizi-2 .pip:nth-child(2) {
+            align-self: flex-end;
+        }
+
+        .shaizi-3 {
+            justify-content: space-between;
+            /* align-items: center; */
+        }
+
+        .shaizi-3 .pip:nth-child(2) {
+            align-self: center;
+        }
+
+        .shaizi-3 .pip:nth-child(3) {
+            align-self: flex-end;
+        }
+
+        .shaizi_4 {
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-content: space-between;
+        }
+
+        .shaizi_4-clomun {
+            display: flex;
+            flex-basis: 100%;
+            justify-content: space-between;
+        }
+    </style>
+    <section style="display: flex;">
+        <div class="shaizi shaizi-1">
+            <span class="pip"></span>
+        </div>
+        <div class="shaizi shaizi-2">
+            <span class="pip"></span>
+            <span class="pip"></span>
+        </div>
+        <div class="shaizi shaizi-3">
+            <span class="pip"></span>
+            <span class="pip"></span>
+            <span class="pip"></span>
+        </div>
+        <div class="shaizi shaizi_4">
+            <div class="shaizi_4-clomun">
+                <span class="pip"></span>
+                <span class="pip"></span>
+                <span class="pip"></span>
+            </div>
+            <div class="shaizi_4-clomun">
+                <span class="pip"></span>
+                <span class="pip"></span>
+            </div>
+        </div>
+        <div class="shaizi shaizi_4">
+            <div class="shaizi_4-clomun">
+                <span class="pip"></span>
+                <span class="pip"></span>
+                <span class="pip"></span>
+            </div>
+            <div class="shaizi_4-clomun">
+                <span class="pip"></span>
+                <span class="pip"></span>
+                <span class="pip"></span>
+            </div>
+            <div class="shaizi_4-clomun">
+                <span class="pip"></span>
+                <span class="pip"></span>
+                <span class="pip"></span>
+            </div>
+        </div>
+    </section>
+
+</section>
+
+<section>
+    <h2>网格布局</h2>
+    <style>
+        .grid {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .grid_cell {
+            flex: 1;
+            margin: 10px;
+            padding: 10px;
+            background-color: #ededed;
+        }
+    </style>
+    <div class="grid">
+        <div class="grid_cell">我们首先要搞明白计算机（Computer）和计算（Compute）的概念。
+
+            在计算机的层次上，CPU执行的是加减乘除的指令代码，以及各种条件判断和跳转指令，所以，汇编语言是最贴近计算机的语言。
+
+            而计算则指数学意义上的计算，越是抽象的计算，离计算机硬件越远。
+
+            对应到编程语言，就是越低级的语言，越贴近计算机，抽象程度低，执行效率高，比如C语言；越高级的语言，越贴近计算，抽象程度高，执行效率低，比如Lisp语言。
+
+            函数式编程就是一种抽象程度很高的编程范式，纯粹的函数式编程语言编写的函数</div>
+        <div class="grid_cell">1</div>
+    </div>
+    <div class="grid">
+        <div class="grid_cell">1</div>
+        <div class="grid_cell">1</div>
+        <div class="grid_cell">1</div>
+        <div class="grid_cell">1</div>
+    </div>
+
+    <section>
+        <h2>百分比布局</h2>
+        <style>
+            .pgrid {
+                display: flex;
+                margin-top: 10px;
+            }
+
+            .pcell {
+                flex: 1;
+                margin: 10px;
+                background-color: #ededed;
+            }
+
+            .u-full {
+                flex: 0 0 100%;
+            }
+
+            .u-lof2 {
+                flex: 0 0 50%;
+            }
+
+            .u-lof3 {
+                flex: 0 0 33.3333%;
+            }
+
+            .u-lof4 {
+                flex: 0 0 25%;
+            }
+        </style>
+        <div class="pgrid">
+            <div class="pcell u-full">1</div>
+        </div>
+        <div class="pgrid">
+            <div class="pcell u-lof4">1</div>
+            <div class="pcell ">auto</div>
+            <div class="pcell ">auto</div>
+        </div>
+
+        <div class="pgrid">
+            <div class="pcell ">auto</div>
+            <div class="pcell u-lof3">1</div>
+        </div>
+        <div class="pgrid">
+            <div class="pcell u-lof4">1/4</div>
+
+            <div class="pcell ">auto</div>
+            <div class="pcell u-lof3">1/3</div>
+        </div>
+    </section>
+</section>
+
+<section>
+    <h2>圣杯布局</h2>
+    <style>
+        .bei {
+            display: flex;
+            min-height: 500px;
+            flex-direction: column;
+        }
+
+        header,
+        footer {
+            flex: 1;
+        }
+
+        .beibody {
+            display: flex;
+            flex: 1;
+        }
+
+        .ads,
+        .navs {
+            flex: 0 0 12em;
+            order: 2;
+            background-color: #e5e5e5;
+        }
+
+        .mins {
+            flex: 1;
+            order: 1;
+            background-color: red;
+        }
+
+        .navs {
+            order: 0;
+            background-color: #d6d6d6;
+        }
+    </style>
+    <section class="bei">
+        <header>header</header>
+        <section class="beibody">
+            <aside class="ads">aside</aside>
+            <nav class="navs">navs</nav>
+            <main class="mins">mains</main>
+        </section>
+        <footer>footer</footer>
+    </section>
+</section>
