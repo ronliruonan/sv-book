@@ -1,0 +1,30 @@
+<article>
+
+</article>
+<!-- has路由 -->
+<script>
+    ; (function (global) {
+        class HashRouter {
+            constructor() {
+                // 键值对存储路由
+                this.routes = {};
+                // 当前路由
+                this.currrentUlr = '';
+
+
+                window.addEventListener('load', this.refresh.bind(this), false);
+                window.addEventListener('hashchange', this.refresh.bind(this), false);
+            }
+
+            route(path, cb) {
+                this.routes[path] = cb || function () { };
+            }
+
+            refresh() {
+                console.log(location.hash);
+                this.currrentUlr = location.hash.slice(1) || '/';
+                this.routes[this.currrentUlr]();
+            }
+        }
+    })(this);
+</script>
