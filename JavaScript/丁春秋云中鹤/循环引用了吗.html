@@ -1,0 +1,31 @@
+<article>
+
+</article>
+
+<script>
+    ; (global => {
+        const isObj = obj => {
+            return Object.prototype.toString.call(obj) === '[object Object]';
+        };
+
+        function cycleDetector(obj) {
+            if (!isObj(obj)) return new TypeError('不是对象');
+
+            let hasCycle = false,
+                cache = [];
+
+            (function cycle(obj) {
+                if (cache.indexOf(obj) !== -1) {
+                    return hasCycle = true;
+                }
+                cache.push(obj);
+                Object.keys(obj).forEach(key => {
+                    const value = obj[key];
+                    isObj(value) && cycle(value);
+                });
+            })(obj);
+            cache.length = 0;
+            return hasCycle;
+        }
+    })(this);
+</script>
