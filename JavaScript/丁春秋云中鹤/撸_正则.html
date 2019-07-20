@@ -1,0 +1,142 @@
+<article>
+    <h2>既然不理解，那就来硬的</h2>
+</article>
+<script>
+    ; (global => {
+        // 整整邮编，6为数组
+        console.group('验证邮编的6位数字');
+        var test1 = /^\d{6}$/.test('1242324');
+        console.log(test1);
+        console.groupEnd();
+
+        console.group('验证身份证是否正确')
+        console.log('要么长度15位，要么长度18位，末尾可能有X字母');
+        var test2 = /^(\d{15})|(\d{14}[xX])|(\d{18})|(\d{17}[xX])$/.test('13245623454543232x');
+        console.log(test2);
+        console.groupEnd();
+
+        console.group('验证日期格式2018-12-12');
+        var test3 = /^\d{4}-\d{2}-\d{2}$/.test('2012-12-12');
+        console.log(test3);
+
+        var test3 = /^\d{4}-\d[1-12]-\d{2}$/.test('2012-13-12');
+        console.log(test3);
+        console.groupEnd();
+
+        console.group('将手机号码中间4位换成****');
+        var str = '12345678900';
+        var regex = /^(\d{4})(\d{4})(\d{3})$/;
+        var result = str.replace(regex, '$1****$3');
+        console.log(result);
+        console.groupEnd();
+
+        console.group('日期格式转换');
+        var str = '00/11/1234';
+        var regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+        var result = str.replace(regex, '$3-$2-$1');
+        console.log(result);
+        console.groupEnd();
+
+        console.group(`找出数组中表示日期的时间爱你字符串，
+并修改格式为'日-月-年’'`);
+        var times = [
+            '1234-02-05',
+            '1514-12-sd',
+            '1sd23-12-12',
+            '12ds34-12-12',
+            '1234-12-12',
+            '12sd34-12-12',
+            '11534-12-12',
+            '1784-12-12',
+        ];
+        var regex = /^\d{4}-\d[1-12]-\d[1-31]$/;
+
+        times.forEach(v => console.log(v.replace(regex, '$3-$2-$1')))
+        console.groupEnd();
+
+        console.group('去掉http协议的jpg');
+        var str = 'http://as.com.cn/asf/asdf/as.jpg';
+        var regex = /^http:(\/\/)/ig;
+        var result = str.replace(regex, '');
+        console.log(result);
+
+        console.groupEnd();
+
+        const { log: _log, group: _group, groupEnd: _groupEnd } = console;
+        _group('将字符串中的bac替换为xzy');
+        var str = 'abc-abAb-Abc';
+        var regex = /(abc)/ig;
+        var result = str.replace(regex, 'xyz');
+        _log(result);
+        _groupEnd();
+
+        _group('判断字符串是否符合指定格式xxxx-xx-x');
+        var str = '1234-12-1';
+        var regex = /^(\d{4})-(\d{2})-(\d{1})$/;
+        _log(regex.test(str));
+        _groupEnd();
+
+        _group('判断是否元音结尾');
+        var str = ['aai', 'nnb', 'ffn', 'ass', 'sb'];
+        var regex = /[a|e|i|o|u]\b/;
+        str.forEach(v => _log(regex.test(str)));
+        _groupEnd();
+
+        _group('匹配QQ号码，5-10位数字，第一位非0');
+
+        regex = /^[1-9]\d{4,9}$/;
+        console.log(regex.test('1222222222'));
+        _groupEnd();
+
+        const group = (title = '...', handler = () => { }) => {
+            console.group(title);
+
+            handler.call(null);
+
+            console.groupEnd();
+        }
+
+        group('判断qq邮箱格式是否正确', () => {
+            var regex = /^[1-9]\d{4,9}\@qq\.com$/ig;
+            console.log(regex.test('123456@qq.com'))
+        })
+
+
+        group('情况字符串的前后空格', () => {
+            var str = '  12345678  ';
+            var regex = /(^\s.)|(.\s$)/g;
+            console.log(str.length);
+            console.log(str.replace(regex, '').length);
+            console.log(str.replace(regex, ''));
+        })
+
+        group('字符串驼峰', function () {
+            var str = 'abc-def-ghi';
+            var regex = /-(\w)/g;
+            var result = str.replace(regex, function ($, $1) {
+                return $1.toUpperCase();
+            });
+
+            console.log(result);
+        })
+
+        group('验证汉子', function () {
+            var str = '大幅度李文防风网';
+            var regex = /^[\u4e00-\u9fa5]{0,}$/g;
+            console.log(str, regex.test(str));
+
+            str = '发了地方我额附加OS';
+            console.log(str, regex.test(str))
+        })
+
+
+
+
+
+
+
+
+
+
+    })(this);
+</script>

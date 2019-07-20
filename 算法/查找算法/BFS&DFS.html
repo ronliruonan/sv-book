@@ -1,0 +1,51 @@
+<article>
+    <section>
+        <h2>BFS</h2>
+        <p>需要队列来保存每一层需要访问的节点</p>
+        <p>先进先出</p>
+        <script>
+            ; (global => {
+                const levelOrder = root => {
+                    const ans = [];
+                    if (!root) return ans;
+
+                    const queue = [root];
+                    while (queue.length) {
+                        const
+                            children = [],
+                            queueLen = queue.length;
+                        for (let i = 0; i < queueLen; i++) {
+                            const item = queue.pop();
+                            children.push(item.val);
+                            item.left && queue.unshift(item.left);
+                            item.right && queue.unshift(item.right);
+                        }
+                        // 这里是children 还是...children?
+                        ans.push(children);
+                    }
+                    return ans;
+                }
+            })(this);
+        </script>
+    </section>
+    <section>
+        <h2>DFS</h2>
+        <p>在递归过程中，记录当前节点的层次信息</p>
+        <script>
+            ; (global => {
+                const levelOrder = root => {
+                    const ans = [];
+                    dfs(root, 0, ans);
+                }
+                const dfs = (root, level, ans = []) => {
+                    if (!root) return;
+
+                    (ans[level] || (ans[level] = [])).push(root.val);
+
+                    dfs(root.left, level + 1, ans);
+                    dfs(root.right, level + 1, ans);
+                }
+            })(this);
+        </script>
+    </section>
+</article>

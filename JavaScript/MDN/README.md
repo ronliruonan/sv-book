@@ -1,5 +1,6 @@
-Javascript 
-==================
+# 已经要熟悉原生的API
+
+
 码MDN + 参考Blog + 动手实践
 
 -  js 实现原生Promise：    
