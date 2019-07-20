@@ -1,0 +1,54 @@
+<section id="autoBgImg">
+    哈哈
+</section>
+<script>
+    ; (function (global, factory, plugin) {
+        global[plugin] = factory.call(global);
+    })(this, function () {
+        return function (el, imgUrls = []) {
+            let __len__ = imgUrls.length,
+                __index__ = 0,
+                __timer__ = null,
+                __el__ = document.querySelector(el);
+
+            const loadingImg = document.createElement('img');
+
+            function auto() {
+                let src = imgUrls[__index__++ % __len__];
+                loadingImg.onload = () => {
+                    __el__.style.backgroundImage = `url(${src})`;
+                    __timer__ = setTimeout(auto, 2000);
+                }
+                loadingImg.src = src;
+            }
+            auto();
+
+            return {
+                next: () => {
+                    clearTimeout(__timer__);
+                    __index__++ && auto();
+                },
+                pre: () => {
+                    clearTimeout(__timer__);
+                    __index__-- && auto();
+                }
+            };
+        }
+    }, 'autoBgImg');
+
+    // function fn2(imgurls = [], el) {
+    //     let autoObj = {
+    //         index: 0
+    //     };
+    //     let val = autoObj.index;
+    //     let __el = document.querySelector(el);
+    //     let loadingImg = document.createElement('img');
+    //     Object.defineProperty(autoObj, index, {
+    //         set: function (newVal) {
+    //             if (newVal === val) return;
+    //             __el.style.backgroundImage = `url(${imgurls[newVal]})`;
+    //         }
+    //     })
+    // }
+
+</script>

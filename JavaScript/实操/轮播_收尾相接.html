@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>轮播-收尾相接</title>
+    <style>
+        .autoImg {
+            width: 400px;
+            height: 250px;
+            margin: 50px auto;
+            border: 2px solid red;
+            position: relative;
+        }
+
+        .autoImg_1,
+        .autoImg_2,
+        .autoImg_3 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-image: url(http://pic26.nipic.com/20130121/8854832_165308225000_2.jpg);
+        }
+
+        .autoImg_2 {
+            right: 400px;
+        }
+
+        .autoImg_3 {
+            right: 800px;
+        }
+
+        .btn {
+            position: absolute;
+            top: -30px;
+        }
+
+        .btn_left {
+            left: 20px;
+        }
+
+        .btn_right {
+            right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <section class='autoImg'>
+        <div class="autoImg_1" data-index=0></div>
+        <!-- <div class="autoImg_2"></div>
+        <div class="autoImg_3"></div> -->
+
+        <a class="btn btn_left" href="javascript:0;">左</a>
+        <a class="btn btn_right" href="javascript:0;">右</a>
+    </section>
+    <script>
+        ; (function (global) {
+            let imgs = [
+                'http://pic26.nipic.com/20130121/8854832_165308225000_2.jpg',
+                'http://pic18.nipic.com/20111223/9040884_155249347302_2.jpg',
+                'http://pic22.nipic.com/20120624/8960079_094140526342_2.jpg',
+                'http://pic44.nipic.com/20140727/18179070_152408117000_2.jpg'
+            ];
+            const clazz = ['.autoImg_1']; //, '.autoImg_2', '.autoImg_3'
+            const els = clazz.map(v => document.querySelector(v));
+
+            els.forEach((el, index) => el.style.backgroundImage = `url(${imgs[index]})`);
+
+            document.querySelector('.autoImg').addEventListener('click', (function () {
+                let __el__ = document.querySelector('.autoImg_1'),
+                    __imgsLength__ = imgs.length;
+                return function (event) {
+                    if (event.target.className.indexOf('left') > -1) {
+                        // 左边
+                        let index = +__el__.getAttribute('data-index');
+
+                        let newIndex = 0;
+                        index === 0 && (newIndex = __imgsLength__ - 1);
+                        index !== 0 && (newIndex = (index - 1) % __imgsLength__);
+
+                        __el__.style.backgroundImage = `url(${imgs[newIndex]})`,
+                            __el__.setAttribute('data-index', newIndex);
+                    } else if (event.target.className.indexOf('right') > -1) {
+                        // 右边
+                        let index = +__el__.getAttribute('data-index');
+                        let newIndex = (index + 1) % __imgsLength__;
+                        __el__.style.backgroundImage = `url(${imgs[newIndex]})`,
+                            __el__.setAttribute('data-index', newIndex);
+                    }
+                }
+            })(), false);
+        })(this);
+    </script>
+</body>
+
+</html>
