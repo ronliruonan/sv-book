@@ -4,7 +4,7 @@
 - public        客户端和代理server可以缓存
 - max-age=30    缓存将在30s后失效
 - no-cache      需要使用对比缓存来验证缓存数据 ，强制向server再次验证
-- no-store      所有内容都不会缓存，
+- no-store      所有内容都不会缓存，no-cache
 
 重用以获取的资源能够有效的提升网站与应用的性能
 

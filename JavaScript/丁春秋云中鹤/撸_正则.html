@@ -104,7 +104,7 @@
 
         group('情况字符串的前后空格', () => {
             var str = '  12345678  ';
-            var regex = /(^\s.)|(.\s$)/g;
+            var regex =/(^\s*)|(\s*$)/g;
             console.log(str.length);
             console.log(str.replace(regex, '').length);
             console.log(str.replace(regex, ''));

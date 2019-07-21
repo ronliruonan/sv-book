@@ -15,6 +15,7 @@
                 this.innerText = ++count;
             }
 
+            // 防抖
             function debounce(fn, delay, flag) {
                 var timeout;
                 return function () {
@@ -33,6 +34,7 @@
             }
 
 
+            // 节流
             function throttle(fn, delay) {
                 var pretime = Date.now();
                 return function () {
