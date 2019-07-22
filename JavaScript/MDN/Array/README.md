@@ -41,7 +41,15 @@ Array.prototype.push.call(thisArr, ...[1,2,3,3,4,5,5,5])
         let arr = [...arguments]; // Array.prototype.slice.call(arguments);
         return Array.from(new Set(arr));
     }
+    // function (arr){
+        var result = [];
+        for(let i = 0 ;i  < lenght ;i ++){
+            if(resutl.indexo(arr[i])<0) resut.push(arr[i])
+        }
+        return resutl;
+    }
     ```
+
 
 
 `Array.isArray()`
