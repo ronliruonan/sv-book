@@ -18,7 +18,7 @@
                     return mid;
                 } else if (target > arr[mid]) {
                     return search(target, arr, mid + 1, end);
-                } else {
+                } else if (target < arr[mid]) {
                     return search(target, arr, start, mid - 1);
                 }
                 return -1;

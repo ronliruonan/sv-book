@@ -9,14 +9,20 @@
 </head>
 
 <body>
-    <!-- <script>
+    <script>
         ; (function (global) {
-            function sort(arr = []) {
-                for (let gap = Math.floor(arr.length / 2); gap > 0; gap = Math.floor(gap / 2)){
-                    for(let)
+            var arr = [49, 38, 65, 97, 76, 13, 27, 49, 55, 04];
+            let len = arr.length;
+            for (let fraction = Math.floor(len / 2); fraction > 0; fraction = Math.floor(fraction / 2)) {
+                for (let i = fraction; i < len; i++) {
+                    for (let j = i - fraction; j >= 0 && arr[j] > arr[fraction + j]; j -= fraction) {
+                        [arr[j], arr[fraction + j]] = [arr[fraction + j], arr[j]];
+                    }
                 }
-        }) (this);
-    </script> -->
+            }
+            console.log(arr);
+        })(this);
+    </script>
 </body>
 
 </html>
