@@ -102,9 +102,9 @@ es6 的实现
 -------------
 参考点：[Object.create()](../object/Object.create.md)
 ```
-var fnNew = function(classname, args){
-    var o = Object.create(classname.prototype);
-    var res = classname.call(o, ...args);
-    return res?res:o;
+const myNew = function(constructor, ...args){
+    const o = Object.create(constructor.prototype);
+    const res = constructor.call(o, ...args);
+    return typeof res ==='object'? res|| o:o;
 }
 ```

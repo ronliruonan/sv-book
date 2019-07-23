@@ -163,12 +163,18 @@
                     // 递归
                     node.children.length && this.Compile(node);
                     if (node.hasAttribute('v-text')) {
-                        this.DepAdd(node, 'v-text', 'innerText');
+
+                        let attrVal = node.getAttribute('v-text'),
+                            // div.innterText = this.$data[mytext]
+                            watcher = new Watcher(node, this, attrVal, 'innerText')
+                        this.__Dep__[attrVal].push(watcher);
                     }
                     if (node.hasAttribute('v-model')) {
-                        this.DepAdd(node, 'v-model', 'value');
+                        let attrVal = node.getAttribute('v-model'),
+                            // div.innterText = this.$data[mytext]
+                            watcher = new Watcher(node, this, attrVal, 'value')
+                        // this.__Dep__[attrVal].push(watcher);
 
-                        let attrVal = node.getAttribute('v-model');
                         node.addEventListener('input', (function () {
                             return function () {
                                 this.$data[attrVal] = node.value;
@@ -177,13 +183,6 @@
                     }
                 }
                 console.log(this.__Dep__);
-            }
-
-            DepAdd(node, attr, exp) {
-                let attrVal = node.getAttribute(attr),
-                    // div.innterText = this.$data[mytext]
-                    watcher = new Watcher(node, this, attrVal, exp)
-                this.__Dep__[attrVal].push(watcher);
             }
         }
         class Watcher {

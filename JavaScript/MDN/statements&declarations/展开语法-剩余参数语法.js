@@ -11,9 +11,9 @@
 
 ; (_ => {
     function sortArgs() {
-        console.log(Array.prototype.sort.call(arguments, (a, b) => a > b ? 1 : -1));
+        console.log([].sort.call(arguments, (a, b) => a > b ? 1 : -1));
 
-        var args = Array.prototype.slice.call(arguments);
+        var args = [].slice.call(arguments);
         console.log(args.sort((a, b) => a > b ? 1 : -1));
     }
 

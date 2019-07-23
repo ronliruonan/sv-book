@@ -13,6 +13,9 @@ Vue 2.x
 ## 组件传值
 
 ### 父子组件
-#### $parent + $children 慎用
-#### props + $emit('event', 'value')
-#### $attrs + $listenners
+- $parent + $children 慎用
+- props + $emit('event', 'value')
+- $attrs + $listenners
+- EventBus
+- slot
+- provider  inject

@@ -41,7 +41,9 @@
         xhr.onerror = () => { };
         xhr.onloadstart = () => { }; // Http 请求开始加载数据时，调用
         xhr.onloadend = () => { }; // Http 内容加载完成后，调用
-        xhr.onload = () => { };
+        xhr.onload = () => {
+            // xhr.response
+         };
         xhr.onprogress = (event) => {
             console.log('event.loaded', event.loaded);
             console.log('event.total', event.total);

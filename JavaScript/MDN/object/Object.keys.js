@@ -1,4 +1,5 @@
-
+// `Object.keys()` 返回给定对象的自身可枚举的属性组成字符串数组
+// ===============
 ; (_ => {
     var obj = Object.create({}, {
         getFoo: {

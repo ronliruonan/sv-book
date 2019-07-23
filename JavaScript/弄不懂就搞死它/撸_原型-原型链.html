@@ -4,9 +4,9 @@
 <footer>will be end</footer>
 <script>
     ; (global => {
-        const { log: __log, group: __group, groupEnd: __groupEnd } = console;
+        var { log: __log, group: __group, groupEnd: __groupEnd } = console;
         __group('Object.prototyp.__proto__  === null');
-        __log(Object.prototype.__proto__ === null);
+        __log(Object.prototype.__proto__ === null); // true
         __groupEnd();
 
         __group('字面量方式的对象{}')

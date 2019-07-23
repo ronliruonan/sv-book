@@ -7,7 +7,7 @@
         var o = Object.create(constructor.prototype);
         var result = constructor.apply(o, args);
 
-        return typeof result === 'object' && result !== null ? result : o;
+        return typeof result === 'object' ? result || o : o;
     }
 
     /**

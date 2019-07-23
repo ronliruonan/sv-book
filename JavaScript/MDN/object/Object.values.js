@@ -1,4 +1,4 @@
-
+// `Object.values()` 返回给定对象的自身可枚举的属性组成 值数组
 ; (_ => {
     var obj = Object.create({}, {
         getFoo: {

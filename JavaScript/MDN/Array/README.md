@@ -2,12 +2,13 @@
 ================= 
 
 
-Array.prototype.push(element)
+Array.prototype.push(ele1,...eleN)
 如果element 是一个新array，那么element将作为一个数组元素插入到Array中，
 
 高级牛逼的用法
 ----------------
-Array.prototype.push.call(thisArr, ...[1,2,3,3,4,5,5,5]) 
+[].push.call(thisArr, ...[1,2,3,3,4,5,5,5]) 
+[].push.apply(thisArr, [12,3,4,4,,5,65,6])
 
 这样就完美了。
 

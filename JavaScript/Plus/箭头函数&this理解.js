@@ -75,14 +75,15 @@
 })();
 
 
+// 有意思的题
 ; (global => {
     window.val = 1;
     var obj = {
         val: 2,
         dbl: function () {
-            console.log(this);
-            console.log(this.val);
-            console.log(val);
+            // console.log(this);
+            // console.log(this.val);
+            // console.log(val);
             this.val *= 2;
             val *= 2;
             console.log('val: ', val, 'this.val:', this.val);
