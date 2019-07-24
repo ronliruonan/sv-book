@@ -114,3 +114,11 @@ async function errorasdf(asyncfunc) {
     }
 }
 let [err, res] = await errorasdf(asyncfunc);
+
+
+; (global => {
+    const isType = type => obj => `[object ${type + ''.replace(/\w/, $1 => $1.toUpperCase())}]` === Object.prototype.toString.call(obj);
+    const _isArray = isType('array'),
+        _isObject = isType('Object'),
+        _isNull = isType('null');
+})(this);

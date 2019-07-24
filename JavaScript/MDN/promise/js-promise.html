@@ -91,3 +91,15 @@
             .then(a => console.log('sync_fp 必须成功'), b => console.log('sync_fp 不可能出现'));
     })(window);
 </script>
+
+
+
+<script>
+    Promise.prototype.finally = function (callback) {
+        let cn = this.constructor;
+        return this.then((resolve, reject) => {
+            resolve = cn.resolve(callback()),
+                reject = cn.resolve(callback())
+        })
+    }
+</script>

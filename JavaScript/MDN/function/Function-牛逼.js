@@ -195,8 +195,9 @@
     console.log(padZeros(6, 0, 123), 123);
     console.log(padZeros(6, 0, 1234), 1234);
     console.log(padZeros(6, 0, 12345), 12345);
-
-
+    // 新的
+    let enen0 = 0 + '', nenestr = 124 + '';
+    let dd = 6 - nenestr.length > 0 ? (enen0.repeat(6 - nenestr.length) + nenestr) : nenestr;
 
     ; (global => {
 

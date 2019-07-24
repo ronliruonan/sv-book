@@ -1,5 +1,7 @@
 <div id='id' class="default sb">ClassList神操作</div>
-
+<code>
+    '     1     2     '.replace(/\s+/g, ' ').replace(/^\s*|\s*$/g,'').split(' ')
+</code>
 <script>
     // ; (global => {
     //     class MyList {
@@ -7,6 +9,7 @@
     //             this.el = el;
     //             this.value = this.el.className + '';
     //             this.__classes = this.value.split(' ');
+    // // .replace(/\s+/g, ' ').replace(/^\s*|\s*$/g,'').split(' ')
     //         }
 
     //         contains(className) {
@@ -51,7 +54,7 @@
     ; (global => {
         class MyDomTokenList {
             constructor(el) {
-                this.__clazzs__ = el.className.split(' ');
+                this.__clazzs__ = el.className.split(' '); // .replace(/\s+/g, ' ').replace(/^\s*|\s*$/g,'').split(' ')
 
                 Object.defineProperty(this, 'value', {
                     get: function () {
@@ -135,7 +138,7 @@
         Object.defineProperty(HTMLElement.prototype, 'myClassList', {
             get: function () {
                 if (!this.__dtl__) {
-                    this.__dtl__ = this.className.split(' ');
+                    this.__dtl__ = this.className.split(' '); // .replace(/\s+/g, ' ').replace(/^\s*|\s*$/g,'').split(' ')
                     this.__dtl__.__proto__ = new MyDomTokenList(this);
                 }
                 return this.__dtl__;
