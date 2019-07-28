@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p v-text="txt"></p>
+        <input type="text" v-model="txt">
+    </div>
+    <script>
+        const isType = type => obj => `[object ${type}]` === Object.prototype.toString.call(obj);
+        const isFunction = isType('Function');
+
+        class MVVM {
+            constructor(options) {
+                this.$el = document.querySelector(options.el);
+                {
+                    let tempData = options.data;
+                    this.$data = isFunction(tempData) ? tempData() : tempData;
+                }
+                this.__dep__ = {};
+
+                this.Observer(this.$data);
+                this.Compile(this.$el);
+            }
+
+            Observer(data) {
+                for (let key in data) {
+                    this.__dep__[key] = [];
+                }
+
+                let _this = this;
+                this.$proxy = new Proxy(data, {
+                    get: function (target, prop) {
+                        return prop in target ? target[prop] : void 0;
+                    },
+                    set: function (target, prop, value) {
+                        if (prop in target && data[prop] !== value) {
+                            data[prop] = value;
+                            _this.__dep__[prop].forEach(w => w.update());
+                        }
+
+                        return true;
+                    }
+                });
+
+                Object.assign(this.$proxy, data);
+            }
+
+            Compile(el) {
+                let nodes = el.children,
+                    nodesLen = nodes.length;
+                for (let i = 0; i < nodesLen; i++) {
+                    let node = nodes[i];
+                    node.children.length && this.Compile(node);
+
+                    if (node.hasAttribute('v-text')) {
+                        let attrVal = node.getAttribute('v-text');
+                        let watcher = new Watcher(node, 'innerText', this, attrVal);
+                        this.__dep__[attrVal].push(watcher);
+                    }
+
+                    if (node.hasAttribute('v-model')) {
+                        let attrVal = node.getAttribute('v-model');
+                        let watcher = new Watcher(node, 'value', this, attrVal);
+
+                        let handler = () => this.$proxy[attrVal] = node.value;
+                        node.addEventListener('input', handler, false);
+                    }
+
+                }
+            }
+        }
+
+        class Watcher {
+            constructor(node, exp, vm, attr) {
+                this.$node = node;
+                this.$exp = exp;
+                this.$vm = vm;
+                this.$attr = attr;
+                this.update();
+            }
+            update() {
+                this.$node[this.$exp] = this.$vm.$proxy[this.$attr];
+            }
+        }
+
+        new MVVM({
+            el: '#app',
+            data() { return { txt: 'Hello Proxy' } }
+        });
+    </script>
+
+    <h3 id='h3_text'></h3>
+    <input type="text" id="h3_input">
+    <script>
+        const
+            h3_text = document.getElementById('h3_text'),
+            h3_input = document.getElementById('h3_input');
+        const data = { txt: 'hi txt' };
+        const proxy = new Proxy(data, {
+            get: function (target, prop) {
+                return prop in target ? target[prop] : void 0;
+            },
+            set: function (target, prop, value) {
+                if (prop === 'txt') {
+                    h3_text.innerText = value;
+                    h3_input.value = value;
+                    target[prop] = value;
+                }
+                return true;
+            }
+        });
+
+        h3_input.addEventListener('input', function (e) {
+            proxy['txt'] = e.target.value;
+        }, false);
+
+        Object.assign(proxy, data);
+
+    </script>
+</body>
+
+</html>

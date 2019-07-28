@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <h2 v-text="txt"></h2>
+        <p v-text="txt"></p>
+        <input type="text" v-model="txt">
+    </div>
+    <script>
+        ; (global => {
+            const isType = type => obj => `[object ${type}]` === Object.prototype.toString.call(obj);
+            const isFunction = isType('Function');
+
+            class MVVM {
+                constructor(options) {
+                    this.$el = document.querySelector(options.el);
+                    this.$data = isFunction(options.data) ? options.data() : options.data;
+                    this.__dep__ = {};
+
+                    this.Observer(this.$data);
+                    this.Compile(this.$el);
+                }
+
+                Observer(data) {
+                    for (const key in data) {
+                        this.__dep__[key] = [];
+
+                        let value = data[key],
+                            watchers = this.__dep__[key];
+
+                        Object.defineProperty(this.$data, key, {
+                            get: function () { return value },
+                            set: function (newVal) {
+                                if (newVal === value) return;
+                                value = newVal;
+                                watchers.forEach(w => w.update());
+                            }
+                        });
+                    }
+
+                }
+
+                Compile(el) {
+                    let nodes = el.children,
+                        nodesLen = nodes.length;
+                    for (let i = 0; i < nodesLen; i++) {
+                        let node = nodes[i];
+                        node.children.length && this.Compile(node);
+
+                        if (node.hasAttribute('v-text')) {
+                            let attrVal = node.getAttribute('v-text');
+                            // div.innerText = this.$data['attrval']
+                            let watcher = new Watcher(node, 'innerText', this, attrVal);
+
+                            this.__dep__[attrVal].push(watcher);
+                        }
+
+                        if (node.hasAttribute('v-model')) {
+                            let attrVal = node.getAttribute('v-model');
+                            let watcher = new Watcher(node, 'value', this, attrVal);
+
+                            let handler = () => { this.$data[attrVal] = node.value };
+
+                            node.addEventListener('input', handler, false);
+                        }
+                    }
+                }
+            }
+
+            class Watcher {
+                constructor(node, exp, vm, attr) {
+                    this.$el = node;
+                    this.$exp = exp;
+                    this.$vm = vm;
+                    this.$attr = attr;
+
+                    // Object.assign(this, { $el: node, $exp: exp, $vm: vm, $attr: attr });
+
+                    this.update();
+                }
+
+                update() {
+                    this.$el[this.$exp] = this.$vm.$data[this.$attr];
+                }
+            }
+
+            var vm = new MVVM({
+                el: '#app',
+                // data: {
+                //     txt: 'Hello TXT'
+                // }
+                data() { return { txt: 'Hello TXT' } }
+            });
+        })(this);
+    </script>
+</body>
+
+</html>
