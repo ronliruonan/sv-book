@@ -1,8 +1,14 @@
 #  Angular
 
 ## 生命周期
-- ngOnChange
-- ngOnInit
+- ngOnChanges()
+- ngOnInit()
+- ngDoCheck()
+- ngAfterContentInit()
+- ngAfterContentChecked()
+- ngAfterViewInit()
+- ngAfterViewChecked()
+- ngOnDestroy()
 
 ## 双向绑定原理
 脏数据检查

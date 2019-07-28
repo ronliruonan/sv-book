@@ -170,9 +170,9 @@
                         this.__Dep__[attrVal].push(watcher);
                     }
                     if (node.hasAttribute('v-model')) {
-                        let attrVal = node.getAttribute('v-model'),
-                            // div.innterText = this.$data[mytext]
-                            watcher = new Watcher(node, this, attrVal, 'value')
+                        let attrVal = node.getAttribute('v-model');
+                        // div.innterText = this.$data[mytext]
+                        let watcher = new Watcher(node, this, attrVal, 'value')
                         // this.__Dep__[attrVal].push(watcher);
 
                         node.addEventListener('input', (function () {
@@ -182,7 +182,6 @@
                         })().bind(this), false);
                     }
                 }
-                console.log(this.__Dep__);
             }
         }
         class Watcher {
@@ -212,7 +211,7 @@
     })(this);
 </script>
 
-<script>
+ <script>
     ; (global => {
         const div = document.querySelector('#div_proxy'),
             input = document.querySelector('#input_proxy');
@@ -273,4 +272,4 @@
     // proxy_obj.b = 1000;
     console.log(proxy_obj.a);
     console.log(obj);
-</script>
+</script> 

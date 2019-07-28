@@ -102,6 +102,7 @@ overflow: hidden;
 .info-tab {
     position: relative;
 }
+// 试过了，好东西
 .info-tab::after {
     content: '';
     border: 4px solid transparent;
