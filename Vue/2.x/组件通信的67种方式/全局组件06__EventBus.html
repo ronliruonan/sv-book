@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>全局组件06__EventBus</title>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">asdf</div>
+    <script>
+        var EventBus = new Vue();
+        var Child = {
+            template: `
+            <div>
+               <section style="margin:10px;padding: 10px; border:2px solid #e2e2e2; border-radius: 20px;">
+                    <input id="ff" @input="fire" ref="fire">
+               </section>
+            </div>`,
+            data() { return {} },
+            methods: {
+                fire() {
+                    EventBus.$emit('comeone', `${this.$refs.fire.value}[child]`);
+                }
+            }
+        };
+        var App = {
+            template: `
+                <div>
+                  <section style="border:3px solid #e3e3e3; border-radius: 20px;margin:10px; padding:10px;">
+                    <h2>{{ message }}</h2>
+                    <a @click="kk" href="javascript:;">改变自身msg</a>
+                  </section>
+                  
+                  <child :msg='message'></child>
+                </div>
+            `,
+            components: {
+                Child
+            },
+            data() {
+                return {
+                    message: "i'm from parent"
+                }
+            },
+            mounted() {
+                EventBus.$on('comeone', (value) => {
+                    this.message = 'Event bUs: ' + value;
+                })
+            },
+            methods: {
+                kk() {
+                    this.message = Math.floor(Math.random() * 10) + '';
+                },
+
+            }
+        };
+        new Vue({
+            el: '#app',
+            components: { App },
+            template: `<app />`,
+            data() { return {} },
+        })
+    </script>
+</body>
+
+</html>

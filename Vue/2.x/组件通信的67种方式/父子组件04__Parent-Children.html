@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父子组件04__Parent-Children</title>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">asdf</div>
+    <script>
+
+        var App_a = {
+            template: `
+            <div>
+               <section style="margin:10px;padding: 10px; border:2px solid #e2e2e2; border-radius: 20px;">
+                  <h2>App_a</h2>
+                   {{$parent.message}}
+                   {{cc}}
+               </section>
+            </div>`,
+            data() { return { cc: 'cc' } },
+        };
+        var App = {
+            template: `
+                <div>
+                  <section style="border:3px solid #e3e3e3; border-radius: 20px;margin:10px; padding:10px;">
+                    <h2>{{ message }}</h2>
+                    <a @click="kk" href="javascript:;">改变自身msg</a>
+                    <App_a />
+                  </section>
+                </div>
+            `,
+            components: {
+                App_a
+            },
+            data() {
+                return {
+                    obprop: 'props会被拦截到吗？',
+                    message: "i'm from parent"
+                }
+            },
+            methods: {
+                kk() {
+                    this.message = Math.floor(Math.random() * 10) + '';
+                    this.$children[0]['cc'] = this.message;
+                },
+                getChild_c(val) {
+
+                    this.message = 'From Child-C: ' + val;
+                }
+            }
+        };
+        new Vue({
+            el: '#app',
+            components: { App },
+            template: `<app />`,
+            data() { return {} },
+        })
+    </script>
+</body>
+
+</html>

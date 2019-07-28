@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父子组件02__$attrs-$listeners</title>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">asdf</div>
+    <script>
+        var App_c = {
+            template: `
+            <div>
+               <section style="margin:10px;padding: 10px; border:2px solid #e2e2e2; border-radius: 20px;">
+                  <h2>App_c</h2>
+                  <p>From grand: {{$attrs.anyname}}</p>
+                  <input @input="inputany($event)" />
+               </section>
+            </div>`,
+            data() { return {} },
+            methods: {
+                inputany(e) {
+                    this.$emit('getChild_c', e.target.value);
+                }
+            }
+        };
+        var App_b = {
+            template: `
+            <div>
+               <section style="margin:10px;padding: 10px; border:2px solid #e2e2e2; border-radius: 20px;">
+                  <h2>App_b</h2>
+                  <p>{{$attrs.anyname}}</p>
+                  <App_c v-bind="$attrs" v-on="$listeners" />
+               </section>
+            </div>`,
+            components: { App_c },
+            data() { return {} },
+        };
+        var App_a = {
+            template: `
+            <div>
+               <section style="margin:10px;padding: 10px; border:2px solid #e2e2e2; border-radius: 20px;">
+                  <h2>App_a</h2>
+                  <p>拦截？{{obprop}}</p>
+                  <p>$attrs.anyname: {{$attrs.anyname}}</p>
+                  <p>$attrs.obprop: {{$attrs.obprop}}</p>
+                  <App_b v-bind="$attrs" v-on="$listeners" />
+               </section>
+            </div>`,
+            props: {
+                obprop: {
+                    type: String,
+                    require: true
+                }
+            },
+            components: { App_b },
+            data() { return {} },
+        };
+        var App = {
+            template: `
+                <div>
+                  <section style="border:3px solid #e3e3e3; border-radius: 20px;margin:10px; padding:10px;">
+                    <h2>{{ message }}</h2>
+                    <a @click="kk" href="javascript:;">改变自身msg</a>
+
+                    <App_a :anyname="message" :obprop="obprop" @getChild_c="getChild_c" />
+                  </section>
+                </div>
+            `,
+            components: {
+                App_a
+            },
+            data() {
+                return {
+                    obprop: 'props会被拦截到吗？',
+                    message: "i'm from parent"
+                }
+            },
+            methods: {
+                kk() {
+                    this.message = Math.floor(Math.random() * 10) + '';
+                },
+                getChild_c(val) {
+
+                    this.message = 'From Child-C: ' + val;
+                }
+            }
+        };
+        new Vue({
+            el: '#app',
+            components: { App },
+            template: `<app />`,
+            data() { return {} },
+        })
+    </script>
+</body>
+
+</html>

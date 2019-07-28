@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父子组件03__Slot</title>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">asdf</div>
+    <script>
+        var ScopSlot = {
+            template: `
+                <div>
+                  <slot :user="user">{{user.last}}</slot>
+                  <button type="button" @click="kk"> change name </button>
+                </div>
+            `,
+            data() { return { user: { last: '垃圾', first: '回收' } } },
+            methods: {
+                kk() {
+                    this.user.last = Math.floor(Math.random() * 1000);
+                    this.user.first = Math.floor(Math.random() * 100);
+                }
+            }
+        };
+        var NameSlot = {
+            template: `
+                <div style="margin: 10px; border:2px solid #eee; padding:10px; border-radius:20px;">
+                   <header style="border:1px solid #333;padding:10px;margin:10px;border-radius: 20px;">
+                        <slot name="head">HEAD</slot>
+                   </header>
+                   <div style="border:1px solid #333;padding:10px;margin:10px;border-radius: 20px;">
+                        <slot name="body">BODY</slot>
+                   </div>
+                </div>
+            `,
+            data() { return {} }
+        };
+        var Child = {
+            template: `
+              <div style="margin: 10px; border:2px solid #eee; padding:10px; border-radius:20px;">
+                <slot>替补：父往子传值</slot>
+              </div>
+            `,
+            data() { return {} },
+        };
+        var App = {
+            template: `
+                <div>
+                  <section style="border:3px solid #e3e3e3; border-radius: 20px;margin:10px; padding:10px;">
+                    <h2>{{ message }}</h2>
+                    <button type="button" @click="kk">Change message</button>
+                    <Child />
+                    <Child>{{ message }}</Child>
+                  </section>
+                  <section style="border:3px solid #e3e3e3; border-radius: 20px;margin:10px; padding:10px;">
+                    <NameSlot>
+                        <template #head>
+                            我来组成头部
+                        </template>
+                        <template #body>
+                            我来组屁股
+                        </template>
+                    </NameSlot>
+                  </section>
+                  <section style="border:3px solid #e3e3e3; border-radius: 20px;margin:10px; padding:10px;">
+                    <ScopSlot>
+                        <template #default="solo">
+                            {{solo.user.first}}
+                        </template>
+                    </ScopSlot>
+                    <ScopSlot>
+                        <template #default="{user}">
+                            {{user.last}} + 1
+                        </template>
+                    </ScopSlot>
+                  </section>
+                </div>
+            `,
+            components: {
+                Child,
+                NameSlot,
+                ScopSlot
+            },
+            data() {
+                return {
+                    message: "i'm parent"
+                }
+            },
+            methods: {
+                kk() {
+                    this.message = Math.floor(Math.random() * 100) + '';
+                },
+                resiveChild(val) {
+
+                    this.message = 'From Child: ' + val;
+                }
+            }
+        };
+        new Vue({
+            el: '#app',
+            components: { App },
+            template: `<app />`,
+            data() { return {} },
+        })
+    </script>
+</body>
+
+</html>

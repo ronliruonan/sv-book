@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>父子组件05__Provide-Injecte.html</title>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">asdf</div>
+    <script>
+        var Child = {
+            inject: {
+                foo: {
+                    type: String
+                }
+            },
+            template: `
+            <div>
+               <section style="margin:10px;padding: 10px; border:2px solid #e2e2e2; border-radius: 20px;">
+                 <h2>From Parent</h2>
+                 {{foo}}
+               </section>
+               <input id="ff" @input="fire" ref="fire">
+            </div>`,
+            data() { return {} },
+            methods: {
+                fire() {
+                    this.$emit('comeone', `${this.$refs.fire.value}[child]`);
+                }
+            }
+        };
+        var App = {
+            provide: {
+                foo: 'bar'
+            },
+            template: `
+                <div>
+                  <section style="border:3px solid #e3e3e3; border-radius: 20px;margin:10px; padding:10px;">
+                    <h2>{{ message }}</h2>
+                    <a @click="kk" href="javascript:;">改变自身msg</a>
+                  </section>
+                  
+                  <child :msg='message' @comeone="resiveChild"></child>
+                </div>
+            `,
+            components: {
+                Child
+            },
+            data() {
+                return {
+                    message: "i'm from parent"
+                }
+            },
+            methods: {
+                kk() {
+                    this.message = Math.floor(Math.random() * 10) + '';
+                },
+                resiveChild(val) {
+
+                    this.message = 'From Child: ' + val;
+                }
+            }
+        };
+        new Vue({
+            el: '#app',
+            components: { App },
+            template: `<app />`,
+            data() { return {} },
+        })
+    </script>
+</body>
+
+</html>
