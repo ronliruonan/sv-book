@@ -118,12 +118,11 @@
         // 递归快速排序[8,2,6]
         function quickSort_DiGui(arr = [], start = 0, end = arr.length - 1) {
             if (start >= end) return;
-            let pivot = arr[end];
-            let left = start, right = end - 1;
+            let left = start, right = end - 1, pivot = end;
             // debugger;
             while (left < right) {
-                while (arr[left] < pivot && left < right) left++;
-                while (arr[right] >= pivot && right > left) right--;
+                while (left < right && arr[left] < arr[pivot]) left++;
+                while (right > left && arr[right] >= arr[pivot]) right--;
                 [arr[left], arr[right]] = [arr[right], arr[left]];
             }
             if (arr[left] >= arr[end]) {
