@@ -1,10 +1,10 @@
 
 ## 😀😀😭阮一封的ES6，争取全部掌握       
-😀😭😭 let const var 区别全部掌握，一个不落      
+😭😭 let const var 区别全部掌握，一个不落      
 😭😭 箭头函数 和 普通函数的区别， 必须掌握箭头的this本质      
-😀😭😭 Promise  和 async&await 深挖多看，生成器函数了解一下      
+😭😭 Promise  和 async&await 深挖多看，生成器函数了解一下      
 😭😭 原型、原型链、继承 一定要掌握       
-😀😭😭 module 一定要搞清楚，还有 和commonjs的区别        
+😭😭 module 一定要搞清楚，还有 和commonjs的区别        
 😭😭 Proxy 好好熟悉功能和用法，不用太细       
 
 ## 😀老板喜欢精通一个框架       
