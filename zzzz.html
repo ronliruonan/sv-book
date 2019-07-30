@@ -108,6 +108,21 @@
             new MVVM({ el: '#app', data: { 'txt': 'hello MVVM' } })
         })(window);
     </script>
+    <script>
+    
+   
+    window.onhashchange=function(){
+      var hash = location.hash;
+      switch (hash) {
+        case 'user':
+             // do somethinbg
+          break;
+      
+        default:
+          break;
+      }
+    }
+    </script>
 </body>
 
 </html>
