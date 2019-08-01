@@ -19,4 +19,4 @@ https://juejin.im/post/5b6133a351882519d346853f
     flex 重排性能较好， inline-block  float 重排更快
     - 避免不必要的重绘
       1. color   backgorund 改变时
-      2. 开启硬件加速，例如使用transfor absolute
+      2. 开启硬件加速，例如使用transform absolute
