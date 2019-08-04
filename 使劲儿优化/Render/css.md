@@ -14,7 +14,7 @@ CSS 的clear属性通过使用left、right、both，让该元素向下移动（�
   clear: both;
 }
 ```
-值得一提的是，把父元素属性设置为overflow: auto或overflow: hidden，会使其内部的子元素形成块格式化上下文（Block Formatting Context），并且父元素会扩张自己，使其能够包围它的子元素。
+值得一提的是，把父元素属性设置为overflow: auto或overflow: hidden，会使其内部的子元素形成块格式化上下文（Block Formatting Context），并且*父元素会扩张自己，使其能够包围它的子元素*。
 
 
 ## 块格式化上下文（Block Formatting Context）及其工作原理。
@@ -107,10 +107,17 @@ overflow: hidden;
 // 试过了，好东西
 .info-tab::after {
     content: '';
-    border: 4px solid transparent;
+    border: 10px solid transparent;
     border-top-color: #2c8ac2;
     position: absolute;
     top: 0;
+}
+// 试过了
+.info-tab::after{
+  content: '';
+  border: 10px solid transparent;
+  border-top-color: red;
+  width:0;
 }
 ###  已知父级盒子的宽高，子级img宽高未知，想让img铺满父级盒子且图片不能变形
 需要用到css的object-fit属性
