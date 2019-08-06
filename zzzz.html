@@ -2,127 +2,160 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
 
 <body>
-    <div id='app'>
-        <div v-text="txt"></div>
-        <input v-model="txt">
-    </div>
-    <div id='tt'></div>
-    <input id='dd' type="text">
-    <script>
-        ; (function (global) {
-            const tt = document.querySelector('#tt');
-            const dd = document.querySelector('#dd');
-            const data = {
-                txt: 'Hell Proxy'
-            };
+  <div id='app'>
+    <div v-text="txt"></div>
+    <input v-model="txt">
+  </div>
+  <div id='tt'></div>
+  <input id='dd' type="text">
+  <script>
+    ; (function (global) {
+      const tt = document.querySelector('#tt');
+      const dd = document.querySelector('#dd');
+      const data = {
+        txt: 'Hell Proxy'
+      };
 
-            const proxy = new Proxy(data, {
-                get: function (target, prop) {
-                    return target[prop];
-                },
-                set: function (target, prop, newVal) {
-                    tt.innerText = newVal;
-                    dd.value = newVal;
-                    data.txt = newVal;
-                }
+      const proxy = new Proxy(data, {
+        get: function (target, prop) {
+          return target[prop];
+        },
+        set: function (target, prop, newVal) {
+          tt.innerText = newVal;
+          dd.value = newVal;
+          data.txt = newVal;
+        }
+      });
+      dd.addEventListener('input', function (event) {
+        proxy.txt = event.target.value;
+      }, false);
+      proxy.txt = data.txt;
+    })(this);
+  </script>
+  <script>
+    ; (async (global) => {
+
+      class MVVM {
+        constructor(options) {
+          this.$el = document.querySelector(options.el);
+          this.$data = options.data;
+
+          this.Dep = {};
+
+          this.Observer(this.$data);
+          this.Compile(this.$el);
+        }
+
+        Observer(data) {
+          for (const key in data) {
+            this.Dep[key] = [];
+
+            let val = data[key],
+              watchers = this.Dep[key];
+            Object.defineProperty(this.$data, key, {
+              get: function () { return val },
+              set: function (newVal) {
+                if (val === newVal) return;
+                (val = newVal) && watchers.forEach(watcher => watcher.update());
+              }
             });
-            dd.addEventListener('input', function (event) {
-                proxy.txt = event.target.value;
-            }, false);
-            proxy.txt = data.txt;
-        })(this);
-    </script>
-    <script>
-        ; (async (global) => {
+          }
+        }
 
-            class MVVM {
-                constructor(options) {
-                    this.$el = document.querySelector(options.el);
-                    this.$data = options.data;
+        Compile(el) {
+          let nodes = el.children;
+          for (let i = 0, len = nodes.length; i < len; i++) {
+            let node = nodes[i];
+            node.children.length && this.Compile(node);
 
-                    this.Dep = {};
-
-                    this.Observer(this.$data);
-                    this.Compile(this.$el);
-                }
-
-                Observer(data) {
-                    for (const key in data) {
-                        this.Dep[key] = [];
-
-                        let val = data[key],
-                            watchers = this.Dep[key];
-                        Object.defineProperty(this.$data, key, {
-                            get: function () { return val },
-                            set: function (newVal) {
-                                if (val === newVal) return;
-                                (val = newVal) && watchers.forEach(watcher => watcher.update());
-                            }
-                        });
-                    }
-                }
-
-                Compile(el) {
-                    let nodes = el.children;
-                    for (let i = 0, len = nodes.length; i < len; i++) {
-                        let node = nodes[i];
-                        node.children.length && this.Compile(node);
-
-                        if (node.hasAttribute('v-text')) {
-                            let attrValue = node.getAttribute('v-text');
-                            this.Dep[attrValue].push(new Watcher(node, this, attrValue, 'innerText'));
-                        }
-                        if (node.hasAttribute('v-model')) {
-                            let attrValue = node.getAttribute('v-model');
-                            this.Dep[attrValue].push(new Watcher(node, this, attrValue, 'value'));
-                            node.addEventListener('input', (function () {
-                                return function (event) {
-                                    this.$data[attrValue] = event.target.value;
-                                }
-                            })().bind(this), false);
-                        }
-                    }
-                }
+            if (node.hasAttribute('v-text')) {
+              let attrValue = node.getAttribute('v-text');
+              this.Dep[attrValue].push(new Watcher(node, this, attrValue, 'innerText'));
             }
-
-            class Watcher {
-                constructor(node, vm, attr, exp) {
-                    this.node = node;
-                    this.vm = vm;
-                    this.attr = attr;
-                    this.exp = exp;
-                    this.update();
+            if (node.hasAttribute('v-model')) {
+              let attrValue = node.getAttribute('v-model');
+              this.Dep[attrValue].push(new Watcher(node, this, attrValue, 'value'));
+              node.addEventListener('input', (function () {
+                return function (event) {
+                  this.$data[attrValue] = event.target.value;
                 }
-                update() {
-                    this.node[this.exp] = this.vm.$data[this.attr];
-                }
+              })().bind(this), false);
             }
+          }
+        }
+      }
 
-            new MVVM({ el: '#app', data: { 'txt': 'hello MVVM' } })
-        })(window);
-    </script>
-    <script>
-    
-   
-    window.onhashchange=function(){
+      class Watcher {
+        constructor(node, vm, attr, exp) {
+          this.node = node;
+          this.vm = vm;
+          this.attr = attr;
+          this.exp = exp;
+          this.update();
+        }
+        update() {
+          this.node[this.exp] = this.vm.$data[this.attr];
+        }
+      }
+
+      new MVVM({ el: '#app', data: { 'txt': 'hello MVVM' } })
+    })(window);
+  </script>
+  <script>
+
+
+    window.onhashchange = function () {
       var hash = location.hash;
       switch (hash) {
         case 'user':
-             // do somethinbg
+          // do somethinbg
           break;
-      
+
         default:
           break;
       }
     }
-    </script>
+  </script>
+
+  <script>
+      ; (global => {
+
+
+        function pp(str = '[]{}[}') {
+          // str = '{123}[1](1)';
+          const
+            hashReady = {
+              ')': '(',
+              '}': '{',
+              ']': '['
+            },
+            hashKeys = new Set(['(', '{', '[']),
+            hashValues = new Set([')', '}', ']']),
+            chart_array = str.split(''),
+            queue = [];
+
+          for (let chart of chart_array) {
+            hashKeys.has(chart) && queue.push(chart);
+            if (hashValues.has(chart)) {
+              let pop = queue.pop();
+              if (pop !== hashReady[chart]) return false;
+            }
+          }
+
+          if (queue.length) return false;
+          return true;
+        }
+
+        console.log(pp());
+      })(this);
+  </script>
 </body>
 
 </html>
