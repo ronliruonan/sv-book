@@ -28,3 +28,6 @@ Other Repositories：
 ### 轻量级js全文搜索
 [lunr.js](https://lunrjs.com/docs/index.html)
 
+### SSR ShadowSockR
+https://github.com/Alvin9999/new-pac/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7
+
